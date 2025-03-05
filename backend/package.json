@@ -1,0 +1,31 @@
+{
+  "name": "user-auth",
+  "version": "1.0.0",
+  "description": "based on the  user authentication and authorization ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node Bakend/index.js",
+    "dev": "nodemon Bakend/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rimzim-002/user-authentication.git"
+  },
+  "author": "rimzim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rimzim-002/user-authentication/issues"
+  },
+  "homepage": "https://github.com/Rimzim-002/user-authentication#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
