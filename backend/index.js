@@ -23,7 +23,7 @@ app.use(express.json());
 
 // Connect to Database
 connectDB().then(() => {
-  console.log("🔥 Connected to MongoDB");
+  console.log(" Connected to MongoDB");
   createSuperadmin(); // ✅ Call the function AFTER connecting to DB
 });
 
@@ -48,14 +48,14 @@ async function createSuperadmin() {
       await superadmin.save();
       console.log("✅ Superadmin created successfully!");
     } else {
-      console.log("⚡ Superadmin already exists.");
+      console.log(" Superadmin already exists.");
     }
   } catch (error) {
-    console.error("❌ Error creating superadmin:", error);
+    console.error(" Error creating superadmin:", error);
   }
 }
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  console.log(` Server is running on http://localhost:${PORT}`);
 });

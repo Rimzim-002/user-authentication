@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from 'axios'
 
-function Home() {
+function Signup() {
   const navigate = useNavigate();
   // use the UseState here for  the require feilds 
   const [formdata, setFormdata] = useState({
@@ -75,4 +75,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Signup;
