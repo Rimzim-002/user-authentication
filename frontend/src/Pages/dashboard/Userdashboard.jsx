@@ -11,34 +11,34 @@ import axios from "axios";
 //     { id: 4, name: "Emily Johnson", email: "emily@example.com" },
 // ];
 
-function  Home() {
+function Userdashboard() {
     
     const token = localStorage.getItem("authToken");
     
-    useEffect(() => {
-        const fetchAdminUsers = async () => {
-            try {
-                const response = await axios.get("http://localhost:5000/api/admin/adminusers", {
-                    headers: {
-                        Authorization: `Bearer ${token}`, 
-                        "Content-Type": "application/json",
-                    },
-                });
+    // useEffect(() => {
+    //     const fetchAdminUsers = async () => {
+    //         try {
+    //             const response = await axios.get("http://localhost:5000/api/admin/adminusers", {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`, 
+    //                     "Content-Type": "application/json",
+    //                 },
+    //             });
     
-                console.log(JSON.stringify(response.data, null, 2)); // Pretty-print response
-            } catch (error) {
-                console.error("Error fetching admin users:", error);
-            }
-        };
+    //             console.log(JSON.stringify(response.data, null, 2)); // Pretty-print response
+    //         } catch (error) {
+    //             console.error("Error fetching admin users:", error);
+    //         }
+    //     };
     
-        fetchAdminUsers();
-    }, []);
+    //     fetchAdminUsers();
+    // }, []);
     
     return (
         <>
             <Navbar />
             <div className="home-container">
-                <h1>Welcome to Home Admin Dash Board</h1>
+                <h1>Welcome to Home  User Dash Board</h1>
                 {/* <div className="users-container">
                     {users.map((user, index) => (
                         <motion.div
@@ -60,4 +60,4 @@ function  Home() {
     );
 }
 
-export default  Home;
+export default  Userdashboard() 

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../../Utils/api";
 
 function Login() {
+  const navigate = useNavigate();
   const [formdata, setFormdata] = useState({
     email: "",
     password: "",
@@ -14,61 +15,67 @@ function Login() {
       ...prevdata,
       [name]: value,
     }));
-    console.log(formdata, "data");
   };
 
   const submitHandle = async (e) => {
-    e.preventDefault(); // Prevent page refresh on form submission
+    e.preventDefault();
+
     try {
-      const response = await axios.post("http://localhost:5000/api/users/login", formdata);
-      console.log(response);
+      const response = await loginUser(formdata);
+      console.log("Full response:", response);
+      if (response?.data?.token) {
+        const token = response.data.token;
+        const user = response.data.user;
+      
+        console.log("User data:", user, token);
+      
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("userRole", user.role);
+      
+        console.log("Token saved successfully:", token);
+        console.log("User role:", user.role);
+      
+        navigate("/admindashboard");
+      } else {
+        console.log("No token received in response:", response.data);
+      }
     } catch (err) {
-      console.log(err, "error");
+      console.error("Login error:", err.response ? err.response.data.data : err.message);
     }
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className="card p-4 shadow-lg" style={{ width: "350px" }}>
+    <div className="login-container">
+      <div className="login-card">
+        <h2 className="login-title">Sign In</h2>
         <form onSubmit={submitHandle}>
-          <div className="mb-3">
-            <label htmlFor="exampleInputEmail1" className="form-label mt-3">
-              Email address
-            </label>
+          <div className="input-group">
+            <label>Email Address</label>
             <input
               type="email"
-              className="form-control"
-              id="exampleInputEmail1"
               name="email"
               value={formdata.email}
               onChange={handleChange}
+              required
             />
-            <div id="emailHelp" className="form-text">
-              We'll never share your email with anyone else.
-            </div>
           </div>
 
-          <div className="mb-3">
-            <label htmlFor="exampleInputPassword1" className="form-label">
-              Password
-            </label>
+          <div className="input-group">
+            <label>Password</label>
             <input
               type="password"
-              className="form-control"
               name="password"
               value={formdata.password}
               onChange={handleChange}
-              id="exampleInputPassword1"
+              required
             />
           </div>
 
-          <button type="submit" className="btn btn-primary w-100">
-            Submit
-          </button>
+          <button type="submit" className="login-btn">Login</button>
 
-          <div className="text-center mt-3">
-            <p className="mb-0">
-              Don't have an account? <Link to="/">Signup</Link>
+          <div className="signup-link">
+            <p>
+              Don't have an account? <Link to="/signup">Signup</Link>
             </p>
           </div>
         </form>

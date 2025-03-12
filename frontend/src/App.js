@@ -1,17 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";  // ✅ Corrected import
-import Signup from '../src/Pages/auth/Signup';
-import Login from '../src/Pages/auth/Login';
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+// import Home from "./Pages/dashboard/Homepage";
+import Login from "./Pages/auth/Login";
+import Signup from "./Pages/auth/Signup";
+import Admindashboard from "./Pages/dashboard/Admindashboard";
+import UserManagement from "./Pages/dashboard/Usermanagement";
+
+
 
 function App() {
   return (
-    <Router>  
+    <Router>
       <Routes>
-      <Route path="/" element={<Signup />} />
-
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/admindashboard" element={<Admindashboard />} />
+        <Route path="/admindashboard/allusers" element={<UserManagement />} />
+
+
+
+        <Route/>
+
+        
       </Routes>
     </Router>
   );

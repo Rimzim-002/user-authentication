@@ -1,7 +1,9 @@
 const express = require("express");
 require("dotenv").config();
 const connectDB = require("./Config/dbconnection.js");
-const userRoutes = require("./Routes/userroutes.js");
+const authRoutes = require("./Routes/authroutes.js");
+const adminRoutes = require("./Routes/adminroutes");
+
 const cors = require("cors");
 const bcrypt = require("bcryptjs"); // ✅ Import bcrypt
 const User = require("./Models/user.js"); // ✅ Import User model
@@ -11,7 +13,7 @@ const app = express();
 // CORS Configuration
 const corsOptions = {
   origin: "http://localhost:3000",
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
   credentials: true,
 };
 
@@ -28,7 +30,9 @@ connectDB().then(() => {
 });
 
 // Routes
-app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
+
 
 // SUPER_ADMIN Creation
 async function createSuperadmin() {
