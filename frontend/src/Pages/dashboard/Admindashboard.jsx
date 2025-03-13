@@ -50,7 +50,7 @@ function Admindashboard() {
         if (type === "Total Users") {
             navigate("/admindashboard/allusers"); // ✅ Redirect to users page
         } else if (type === "Total Movies") {
-            navigate("/admin/movies"); // ✅ Redirect to movies page
+            navigate("/admindashboard/allmovies"); // ✅ Redirect to movies page
         } else if (type === "Total Revenue") {
             navigate("/admin/revenue"); // ✅ Redirect to revenue page
         }

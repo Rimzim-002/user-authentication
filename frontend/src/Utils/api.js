@@ -98,6 +98,60 @@ export const deleteUser = async (userId) => {
             throw error;
         }
     };
+// ✅ MOVIE APIs
+export const addMovie = async (formData) => {
+    try {
+        const response = await axiosInstance.post("admin/addmovies", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error adding movie:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
+
+export const getAllMovies = async () => {
+    try {
+        const response = await axiosInstance.get("admin/getAllMovies");
+        return response.data.data;
+    } catch (error) {
+        console.error("Error fetching movies:", error);
+        throw error;
+    }
+};
+
+export const getMovieById = async (movieId) => {
+    try {
+        const response = await axiosInstance.get(`admin/getMovie/${movieId}`);
+        return response.data.data;
+    } catch (error) {
+        console.error("Error fetching movie:", error);
+        throw error;
+    }
+};
+
+export const deleteMovie = async (movieId) => {
+    try {
+        const response = await axiosInstance.delete(`admin/deleteMovie/${movieId}`);
+        return response.data.data;
+    } catch (error) {
+        console.error("Error deleting movie:", error);
+        throw error;
+    }
+};
+
+export const updateMovie = async (movieId, formData) => {
+    try {
+        const response = await axiosInstance.put(`admin/movie/${movieId}`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+        return response.data.data;
+    } catch (error) {
+        console.error("Error updating movie:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
 
 
 // ✅ Export axiosInstance for use in other files if needed

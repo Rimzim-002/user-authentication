@@ -12,13 +12,14 @@ const app = express();
 
 // CORS Configuration
 const corsOptions = {
-  origin: "http://localhost:3000",
-  methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
-  credentials: true,
+  origin: ["http://localhost:3000"], // Allow frontend domain
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"], // Allow Authorization headers
+  credentials: true, // Allow cookies and authentication headers
 };
 
-// Apply CORS Middleware
 app.use(cors(corsOptions));
+
 
 // Middleware
 app.use(express.json());
