@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { addMovie, getAllMovies, deleteMovie, updateMovie } from "../../Utils/api.js"; // ✅ Added updateMovie
 import Navbar from "../../components/Navbar";
-import "../dashboard/moviesmanagement.css";
+import "../styles/moviesmanagement.css";
 
 function MoviesManagement() {
   const [movies, setMovies] = useState([]);
+  console.log(movies,"3456y8o9-]")
   const [movieData, setMovieData] = useState({
     title: "",
     year: "",
@@ -132,12 +133,47 @@ function MoviesManagement() {
 
        {/* Display Movies */}
 <div className="movies-list">
+<h3>Upcoming</h3>
+  <div className="movies-grid">
+    {movies && Array.isArray(movies) && movies.length > 0 ? (
+      movies.filter((m) => m.status === "upcoming").map((movie) => (
+        <div key={movie._id} className="movie-card">
+<img 
+  src={
+    movie.poster.startsWith("http") 
+      ? movie.poster 
+      : `${process.env.REACT_APP_API_BASE_URL || "http://localhost:5000"}${movie.poster}`
+  } 
+  alt={movie.title} 
+  onError={(e) => { e.target.src = "/default-poster.jpg"; }} // ✅ Fallback image
+/>
+          <h4>{movie.title}</h4>
+          <p>{movie.genre.join(", ")}</p>
+          <div className="buttons-cards">
+          <button  onClick={() => handleEdit(movie)}>Edit</button>
+          <button onClick={() => handleDelete(movie._id)}>Delete</button>
+            </div>
+        </div>
+      ))
+    ) : (
+      <p>No upcoming movies found.</p>
+    )}
+  </div>
   <h3>Now Playing</h3>
   <div className="movies-grid">
     {movies && Array.isArray(movies) && movies.length > 0 ? (
       movies.filter((m) => m.status === "now_playing").map((movie) => (
+
         <div key={movie._id} className="movie-card">
-          <img src={`${process.env.REACT_APP_API_BASE_URL}${movie.poster}`} alt={movie.title} />
+<img 
+  src={
+    movie.poster.startsWith("http") 
+      ? movie.poster 
+      : `${process.env.REACT_APP_API_BASE_URL || "http://localhost:5000"}${movie.poster}`
+  } 
+  alt={movie.title} 
+  onError={(e) => { e.target.src = "/default-poster.jpg"; }} // ✅ Fallback image
+/>
           <h4>{movie.title}</h4>
           <p>{movie.genre.join(", ")}</p>
           <button onClick={() => handleEdit(movie)}>Edit</button>
@@ -149,23 +185,9 @@ function MoviesManagement() {
     )}
   </div>
 
-  <h3>Upcoming</h3>
-  <div className="movies-grid">
-    {movies && Array.isArray(movies) && movies.length > 0 ? (
-      movies.filter((m) => m.status === "upcoming").map((movie) => (
-        <div key={movie._id} className="movie-card">
-          <img src={`${process.env.REACT_APP_API_BASE_URL}${movie.poster}`} alt={movie.title} />
-          <h4>{movie.title}</h4>
-          <p>{movie.genre.join(", ")}</p>
-          <button onClick={() => handleEdit(movie)}>Edit</button>
-          <button onClick={() => handleDelete(movie._id)}>Delete</button>
-        </div>
-      ))
-    ) : (
-      <p>No upcoming movies found.</p>
-    )}
-  </div>
+ 
 </div>
+
 
       </div>
     </>

@@ -146,14 +146,15 @@
     border-radius: 8px;
     font-size: 14px;
     cursor: pointer;
-    background-color: #ff4d4d;
-    color: white;
+    background-color: #6af1f1;
+    color: rgb(15, 15, 15);
     margin-top: 10px;
     transition: all 0.3s ease-in-out;
+    margin-left: 10px;
   }
   
   .movie-card button:hover {
-    background-color: #ff0000;
+    background-color: #e85423;
     box-shadow: 0 0 10px rgba(255, 77, 77, 0.8);
   }
   
@@ -167,4 +168,36 @@
       grid-template-columns: 1fr;
     }
   }
-  
+  /* 🎯 Filter Buttons (Pill Shape with Theme) */
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 10px 18px;
+  font-size: 16px;
+  font-weight: bold;
+  background: linear-gradient(to right, #004e92, #000428); /* ✅ Themed gradient */
+  color: white;
+  border: 2px solid cyan;
+  border-radius: 50px; /* ✅ Pill shape */
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+}
+
+.filter-btn:hover {
+  background: cyan;
+  color: black;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+}
+
+/* ✅ Active Filter Button */
+.filter-btn.active {
+  background: cyan;
+  color: black;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 1);
+}

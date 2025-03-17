@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signupUser } from "../../Utils/api";
-import "../auth/signuo.css"; // Import the updated CSS
+import "../styles/signuo.css"; // Import the updated CSS
 
 function Signup() {
   const navigate = useNavigate();

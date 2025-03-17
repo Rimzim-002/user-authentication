@@ -1,0 +1,124 @@
+/* 🟢 Glassmorphic Navbar */
+.custom-navbar {
+    background: linear-gradient(to right, #001f4d, #000428, #004e92);
+    backdrop-filter: blur(12px);
+    padding: 15px 20px;
+    box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.1);
+    border-radius: 0;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  
+  /* 🔵 Glowing Effect */
+  .custom-navbar::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 10%, transparent 80%);
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    filter: blur(30px);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  /* Navbar Glow on Hover */
+  .custom-navbar:hover::before {
+    opacity: 1;
+  }
+  
+  /* 🔹 Brand Logo */
+  .brand-logo {
+    width: 100px;
+    height: 50px;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
+    transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+  }
+  
+  .brand-logo:hover {
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.9));
+    transform: scale(1.05);
+  }
+  
+  /* 🌟 Brand Text */
+  .brand-text {
+    font-size: 26px;
+    font-weight: bold;
+    color: cyan;
+    transition: color 0.3s ease-in-out;
+    text-shadow: 0px 0px 12px rgba(255, 255, 255, 0.8);
+  }
+  
+  /* 📌 Navbar Links */
+  .navbar-nav .nav-link {
+    color: cyan;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+    position: relative;
+    padding: 8px 15px;
+    border-radius: 8px;
+  }
+  
+  /* ⚡ Neon Glow Effect on Hover */
+  .navbar-nav .nav-link:hover {
+    color: #ffffff !important;
+    text-shadow: 0px 0px 12px rgba(255, 255, 255, 1);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* 🟠 Navbar Toggle Button (Hamburger Menu) */
+  .navbar-toggler {
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .navbar-toggler:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* 🔹 Custom Navbar Toggler Icon */
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  }
+  
+  /* 📱 Responsive Adjustments */
+  @media (max-width: 991px) {
+    .custom-navbar {
+        border-radius: 0;
+        max-width: 100%;
+        margin: 0;
+    }
+  
+    .navbar-nav {
+        text-align: center;
+    }
+  
+    .navbar-nav .nav-link {
+        display: block;
+        padding: 12px;
+        font-size: 20px;
+    }
+  }
+  .logout-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+}
+.logout-btn:hover {
+    color: #dc3545; /* Change color on hover */
+}

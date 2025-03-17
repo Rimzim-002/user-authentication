@@ -1,63 +1,126 @@
-import React from "react";
-import Navbar from "../../components/Navbar";
-import { motion } from "framer-motion"; // Import animation library
-import { useEffect } from "react";
-import axios from "axios";
-// Sample users data
-// const users = [
-//     { id: 1, name: "John Doe", email: "john@example.com" },
-//     { id: 2, name: "Jane Smith", email: "jane@example.com" },
-//     { id: 3, name: "Michael Brown", email: "michael@example.com" },
-//     { id: 4, name: "Emily Johnson", email: "emily@example.com" },
-// ];
+import React, { useState, useEffect } from "react";
+import UserNav from "../../components/UserNav";
+import Searchbar from "../../components/Searchbar";
+import { getAllMovies } from "../../Utils/api";
+import "../styles/moviesmanagement.css"; // ✅ Reusing same theme
 
-function Userdashboard() {
-    
-    const token = localStorage.getItem("authToken");
-    
-    // useEffect(() => {
-    //     const fetchAdminUsers = async () => {
-    //         try {
-    //             const response = await axios.get("http://localhost:5000/api/admin/adminusers", {
-    //                 headers: {
-    //                     Authorization: `Bearer ${token}`, 
-    //                     "Content-Type": "application/json",
-    //                 },
-    //             });
-    
-    //             console.log(JSON.stringify(response.data, null, 2)); // Pretty-print response
-    //         } catch (error) {
-    //             console.error("Error fetching admin users:", error);
-    //         }
-    //     };
-    
-    //     fetchAdminUsers();
-    // }, []);
-    
+function UserDashboard() {
+    const [movies, setMovies] = useState([]);
+    const [filteredMovies, setFilteredMovies] = useState([]); // ✅ Store filtered movies
+    const [selectedLanguage, setSelectedLanguage] = useState("All"); // ✅ Track selected language
+
+    useEffect(() => {
+        fetchMovies();
+    }, []);
+
+    const fetchMovies = async () => {
+        try {
+            const response = await getAllMovies();
+            setMovies(response.movies);
+            setFilteredMovies(response.movies); // ✅ Show all movies initially
+        } catch (error) {
+            console.error("Error fetching movies:", error);
+        }
+    };
+
+    // ✅ Filter movies based on selected language
+    const filterMoviesByLanguage = (language) => {
+        setSelectedLanguage(language);
+        if (language === "All") {
+            setFilteredMovies(movies);
+        } else {
+            const filtered = movies.filter((movie) => movie.language.toLowerCase() === language.toLowerCase());
+            setFilteredMovies(filtered);
+        }
+    };
+
     return (
         <>
-            <Navbar />
-            <div className="home-container">
-                <h1>Welcome to Home  User Dash Board</h1>
-                {/* <div className="users-container">
-                    {users.map((user, index) => (
-                        <motion.div
-                            key={user.id}
-                            className="user-card"
-                            initial={{ opacity: 0, y: 50 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            whileHover={{ scale: 1.1 }} // Enlarge on hover
-                            whileTap={{ scale: 0.9 }} // Press down on click
-                            transition={{ duration: 0.3, delay: index * 0.2 }} // Staggered effect
-                        >
-                            <h3>{user.count}</h3>
-                            <p>{user.email}</p>
-                        </motion.div>
-                    ))}
-                </div> */}
+            <div className="main-div">
+                <UserNav />
+                <div className="movies-management-container">
+                    <Searchbar />
+
+                    <h2>All Movies</h2>
+
+                    {/* 🎯 Language Filter Buttons */}
+                    <div className="filter-buttons">
+                        {["All", "English", "Tamil", "Hindi"].map((lang) => (
+                            <button 
+                                key={lang} 
+                                className={`filter-btn ${selectedLanguage === lang ? "active" : ""}`} 
+                                onClick={() => filterMoviesByLanguage(lang)}
+                            >
+                                {lang}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* 🎬 Now Playing Movies Section */}
+                    {/* 🎬 Upcoming Movies Section */}
+                    <h3>Upcoming</h3>
+                    <div className="movies-grid">
+                        {filteredMovies.filter((m) => m.status === "upcoming").length > 0 ? (
+                            filteredMovies.filter((m) => m.status === "upcoming").map((movie) => (
+                                <div key={movie._id} className="movie-card">
+                                    <img 
+                                        src={movie.poster.startsWith("http") 
+                                                ? movie.poster 
+                                                : `${process.env.REACT_APP_API_BASE_URL || "http://localhost:5000"}${movie.poster}`}
+                                        alt={movie.title}
+                                        onError={(e) => { e.target.src = "/default-poster.jpg"; }} // ✅ Fallback image
+                                    />
+                                    <h4>{movie.title}</h4>
+                                    <p>{movie.genre.join(", ")}</p>
+                                    <p className="movie-language">{movie.language}</p>
+                                    {/* 🎬 Watch Trailer Button */}
+                                    <button 
+                                        className="trailer-btn"
+                                        onClick={() => window.open(movie.trailer, "_blank")}
+                                    >
+                                        🎥 Watch Trailer
+                                    </button>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No "Upcoming" movies found.</p>
+                        )}
+                    </div>
+                    <h3>Now Playing</h3>
+                    <div className="movies-grid">
+                        {filteredMovies.filter((m) => m.status === "now_playing").length > 0 ? (
+                            filteredMovies.filter((m) => m.status === "now_playing").map((movie) => (
+                                <div key={movie._id} className="movie-card">
+                                    <img 
+                                        src={movie.poster.startsWith("http") 
+                                                ? movie.poster 
+                                                : `${process.env.REACT_APP_API_BASE_URL || "http://localhost:5000"}${movie.poster}`}
+                                        alt={movie.title}
+                                        onError={(e) => { e.target.src = "/default-poster.jpg"; }} // ✅ Fallback image
+                                    />
+                                    <h4>{movie.title}</h4>
+                                    <p>{movie.genre.join(", ")}</p>
+                                    <p className="movie-language">{movie.language}</p>
+                                    {/* 🎬 Watch Trailer Button */}
+                                    <button 
+                                        className="trailer-btn"
+                                        onClick={() => window.open(movie.trailer, "_blank")}
+                                    >
+                                        🎥 Watch Trailer
+                                    </button>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No "Now Playing" movies found.</p>
+                        )}
+                    </div>
+
+                    
+
+                </div>
             </div>
         </>
     );
 }
 
-export default  Userdashboard() 
+export default UserDashboard;

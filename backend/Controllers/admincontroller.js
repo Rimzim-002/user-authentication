@@ -4,24 +4,36 @@ const Movies= require("../Models/movies.js")
 const Messages = require("../Utils/messages.js");
 const Response = require("../Utils/apiResponse.js")
 const fs = require("fs"); // ✅ Import file system to delete old images
+const { default: mongoose } = require("mongoose");
 
 
 // USERS=============================
+
 const getUserById = async (req, res) => {
     try {
-        const {_id} = req.params;
-        const user = await User.findById(_id)
+        const { _id } = req.params;
 
-        if (!user) {
-            return Response.error(res, { status: 404, message: Messages.USER.NOT_FOUND });
+        if (!mongoose.Types.ObjectId.isValid(_id)) {
+            return res.status(400).json({ success: false, message: "Invalid User ID" });
         }
 
-        return Response.success(res, { status: 200, message: "User found", data: user });
+        // ✅ Aggregation Pipeline
+        const user = await User.aggregate([
+            { $match: { _id: new mongoose.Types.ObjectId(_id) } }
+        ]);
+
+        // ✅ Check if user exists
+        if (user.length === 0) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        return res.status(200).json({ success: true, message: "User found", data: user[0] });
 
     } catch (error) {
-        return Response.error(res, { status: 500, message: Messages.SERVER_ERROR, error: error.message });
+        return res.status(500).json({ success: false, message: "Server Error", error: error.message });
     }
 };
+
 const allUsersadmin = async (req, res) => {
     try {
         // Fetch users with role "user" or "admin"
@@ -37,8 +49,6 @@ const allUsersadmin = async (req, res) => {
             data: { 
                 count: users.length, // Add user count
                 users: users,
-                movies: 50,
-                totalRevenue: 50000
             } 
         });
     } catch (error) {
@@ -101,9 +111,10 @@ const getAllMovies = async (req, res) => {
                 success: true,
                 message: "No movies found",
                 data: {
-                    count: 0,
+                    count: allMovies.length,
                     movies: [],
-                    totalRevenue: 0
+                    
+                   
                 }
             });
         }
@@ -221,11 +232,6 @@ const addMovie = async (req, res) => {
         return res.status(500).json({ success: false, message: "Server Error", error: error.message });
     }
 };
-
-
-
-
-
 const updateMovieById = async (req, res) => {
     try {
         const { _id } = req.params;
@@ -264,6 +270,20 @@ const updateMovieById = async (req, res) => {
         return res.status(500).json({ success: false, message: "Something went wrong, please try again", error: error.message });
     }
 };
+const logoutadmin = async (req, res) => {
+    try {
+        // Clearing token from client-side by removing it from cookies or local storage
+        res.clearCookie("token"); // If using cookies
+        return res.status(200).json({ success: true, message: "Logout successful" });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Server error", error: error.message });
+    }
+};
+
+
+
+
+
 
 
  
@@ -273,4 +293,4 @@ const updateMovieById = async (req, res) => {
 module.exports = {
    
     allUsersadmin,getUserById,deleteUserById,updateUserById,addMovie,getAllMovies,getMovie,deleteMovie
-,updateMovieById};
+,updateMovieById,logoutadmin};

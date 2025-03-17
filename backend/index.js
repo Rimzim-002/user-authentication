@@ -3,6 +3,8 @@ require("dotenv").config();
 const connectDB = require("./Config/dbconnection.js");
 const authRoutes = require("./Routes/authroutes.js");
 const adminRoutes = require("./Routes/adminroutes");
+const  userRoutes= require("./Routes/authroutes.js")
+const path = require("path");
 
 const cors = require("cors");
 const bcrypt = require("bcryptjs"); // ✅ Import bcrypt
@@ -17,6 +19,7 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"], // Allow Authorization headers
   credentials: true, // Allow cookies and authentication headers
 };
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use(cors(corsOptions));
 
@@ -33,7 +36,7 @@ connectDB().then(() => {
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
-
+app.use("api/user",userRoutes)
 
 // SUPER_ADMIN Creation
 async function createSuperadmin() {

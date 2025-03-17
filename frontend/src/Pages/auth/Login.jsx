@@ -31,11 +31,13 @@ function Login() {
       
         localStorage.setItem("authToken", token);
         localStorage.setItem("userRole", user.role);
+        if (user.role === "superadmin") {
+          navigate("/admindashboard");
+      } else {
+          navigate("/user/dashboard");
+      }
       
-        console.log("Token saved successfully:", token);
-        console.log("User role:", user.role);
-      
-        navigate("/admindashboard");
+        
       } else {
         console.log("No token received in response:", response.data);
       }
