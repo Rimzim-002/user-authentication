@@ -1,0 +1,146 @@
+/* 🎬 Revenue Dashboard */
+.revenue-dashboard {
+    text-align: center;
+    padding: 50px;
+    background: linear-gradient(to right, #000428, #00021a, #001f3f);
+    min-height: 100vh;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-top: 65px;
+  }
+  
+  /* 🎟 Title */
+  .revenue-dashboard h2 {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 2rem;
+    color: cyan;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+  }
+  
+  /* 🎬 Table Container */
+  .movies-list {
+    width: 100%;
+    max-width: 90%;
+    margin: 0 auto;
+    overflow-x: auto; /* ✅ Allows horizontal scrolling if needed */
+  }
+  
+  /* 🌟 Table Styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    min-width: 800px; /* ✅ Ensures columns don’t shrink too much */
+  }
+  
+  /* 🌟 Header Styling */
+  thead {
+    background: linear-gradient(to right, #004e92, #000428);
+    color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  }
+  
+  th, td {
+    padding: 12px 10px; /* ✅ Reduce padding for smaller screens */
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1rem;
+    white-space: nowrap; /* ✅ Prevents text from wrapping */
+  }
+  
+  /* 🏆 Highlight Top Seller */
+  .top-seller {
+    background: rgba(255, 215, 0, 0.3);
+    font-weight: bold;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  }
+  
+  /* 💰 Total Revenue Highlight */
+  .total-revenue {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #6af1f1;
+    text-shadow: 0 0 10px rgba(106, 241, 241, 0.7);
+  }
+  
+  /* 🏆 Highlight Sold Tickets */
+  .highlight-sold {
+    font-weight: bold;
+    color: #ffcc00;
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
+  }
+  
+  /* 🏆 Hover Effect */
+  tbody tr:hover {
+    background: rgba(0, 255, 255, 0.2);
+    transition: 0.3s ease-in-out;
+  }
+  
+  /* 🖼 Movie Poster */
+  .movie-poster {
+    width: 50px; /* ✅ Smaller image size for better responsiveness */
+    height: 70px;
+    border-radius: 5px;
+    object-fit: cover;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .movie-poster:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+  }
+  
+  /* 📱 Mobile Responsive */
+  @media (max-width: 992px) {
+    th, td {
+      padding: 8px;
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .movies-list {
+      width: 100%;
+      overflow-x: auto; /* ✅ Enables horizontal scrolling */
+    }
+  
+    th, td {
+      padding: 6px;
+      font-size: 12px;
+    }
+  
+    .movie-poster {
+      width: 40px;
+      height: 60px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .movies-list {
+      width: 100%;
+      overflow-x: auto; /* ✅ Ensures scrollability on small devices */
+    }
+  
+    table {
+      font-size: 0.9rem;
+      min-width: 700px; /* ✅ Prevents text wrapping issues */
+    }
+  
+    th, td {
+      padding: 5px;
+    }
+  
+    .movie-poster {
+      width: 35px;
+      height: 50px;
+    }
+  }
+  

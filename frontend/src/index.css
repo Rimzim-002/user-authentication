@@ -562,3 +562,102 @@ code {
   margin-bottom: 10px;
   color: cyan;
 }
+/* ======= Navbar Styling ======= */
+.custom-navbar {
+  background-color: #1a1a1a; /* Dark theme background */
+  padding: 12px 20px;
+  border-bottom: 2px solid #333;
+}
+
+/* Brand Logo */
+.brand-logo {
+  height: 45px;
+  transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+}
+
+.brand-logo:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0px 0px 8px rgba(243, 156, 18, 0.8)); /* Glowing effect */
+}
+
+/* ======= Navbar Items ======= */
+.navbar-nav .nav-item .nav-link {
+  color: #f5f5f5; /* Light text for contrast */
+  font-size: 16px;
+  padding: 10px 15px;
+  transition: all 0.3s;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+  color: #f39c12; /* Orange glow on hover */
+}
+
+/* ======= Profile Button ======= */
+.profile-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease-in-out;
+}
+
+.profile-btn:hover {
+  color: #f39c12;
+}
+
+/* ======= Dropdown Menu Styling ======= */
+.dropdown-menu {
+  background-color: #222; /* Slightly lighter dark */
+  border: 1px solid #444;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 0;
+  min-width: 160px;
+}
+
+/* Dropdown Items */
+.dropdown-menu .dropdown-item {
+  color: #f5f5f5;
+  font-size: 14px;
+  padding: 12px 15px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-menu .dropdown-item svg {
+  margin-right: 10px;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background-color: #f39c12;
+  color: #141414;
+}
+
+/* ======= Logout Button ======= */
+.logout-btn {
+  color: #ff4d4d !important; /* Red for danger indication */
+  font-weight: bold;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 77, 77, 0.2) !important;
+  color: #ff4d4d !important;
+}
+
+/* ======= Mobile Responsive ======= */
+@media (max-width: 768px) {
+  .custom-navbar {
+      padding: 8px 15px;
+  }
+  .navbar-nav {
+      text-align: center;
+  }
+  .profile-btn {
+      justify-content: center;
+  }
+}

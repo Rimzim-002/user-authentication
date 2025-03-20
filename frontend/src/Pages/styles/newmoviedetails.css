@@ -1,0 +1,112 @@
+/* 🌌 Unique Full Page Background */
+.movie-details-page {
+    background: linear-gradient(to right, #000428, #00021a, #001f3f);
+    padding-top: 70px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 🎬 Unique Movie Card */
+.movie-details-card {
+    width: 80%;
+    max-width: 750px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+/* 🎞 Unique Movie Poster Container */
+.movie-details-poster-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.movie-details-poster {
+    width: 100%;
+    max-width: 500px;
+    height: 350px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+/* 🎬 Unique Movie Title */
+.movie-details-title {
+    font-size: 26px;
+    margin: 10px 0;
+    color: cyan;
+    text-transform: uppercase;
+}
+
+/* 📜 Unique Movie Info */
+.movie-details-info p {
+    font-size: 16px;
+    margin: 8px 0;
+    color: #ffffff;
+}
+
+/* 🎥 Unique Buttons Container */
+.movie-details-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* 🌟 Common Button Style */
+.movie-details-btn {
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+/* 🎬 Unique Watch Trailer Button */
+.movie-details-trailer-btn {
+    background: #d81b60;
+    color: white;
+}
+
+.movie-details-trailer-btn:hover {
+    background: #b3003a;
+    box-shadow: 0 0 10px rgba(216, 27, 96, 0.8);
+}
+
+/* 🎟 Unique Book Ticket Button */
+.movie-details-book-btn {
+    background: #ff9800;
+    color: white;
+}
+
+.movie-details-book-btn:hover {
+    background: #e68900;
+    box-shadow: 0 0 10px rgba(255, 152, 0, 0.8);
+}
+
+/* 🖥 Responsive Design */
+@media (max-width: 768px) {
+    .movie-details-card {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .movie-details-poster {
+        max-width: 90%;
+        height: auto;
+    }
+
+    .movie-details-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

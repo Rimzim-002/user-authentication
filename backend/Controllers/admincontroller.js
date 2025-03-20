@@ -1,6 +1,6 @@
 require("dotenv").config();
 const User = require("../Models/user.js");
-const Movies= require("../Models/movies.js")
+const Movies = require("../Models/movies.js")
 const Messages = require("../Utils/messages.js");
 const Response = require("../Utils/apiResponse.js")
 const fs = require("fs"); // ✅ Import file system to delete old images
@@ -43,13 +43,13 @@ const allUsersadmin = async (req, res) => {
             return Response.error(res, { status: 404, message: Messages.USER.NO_USERS_FOUND });
         }
 
-        return Response.success(res, { 
-            status: 200, 
-            message: "All users with role 'user' and 'admin'", 
-            data: { 
+        return Response.success(res, {
+            status: 200,
+            message: "All users with role 'user' and 'admin'",
+            data: {
                 count: users.length, // Add user count
                 users: users,
-            } 
+            }
         });
     } catch (error) {
         return Response.error(res, { status: 500, message: Messages.SERVER_ERROR, error: error.message });
@@ -60,7 +60,7 @@ const allUsersadmin = async (req, res) => {
 const deleteUserById = async (req, res) => {
     try {
         const { _id } = req.params;
-        
+
         // Find and delete user
         const user = await User.findByIdAndDelete(_id);
 
@@ -77,7 +77,7 @@ const deleteUserById = async (req, res) => {
 };
 const updateUserById = async (req, res) => {
     try {
-        const { _id } = req.params; 
+        const { _id } = req.params;
         const { role, ...updateData } = req.body;
 
         if (role && !["user", "admin"].includes(role)) {
@@ -113,8 +113,8 @@ const getAllMovies = async (req, res) => {
                 data: {
                     count: allMovies.length,
                     movies: [],
-                    
-                   
+
+
                 }
             });
         }
@@ -143,7 +143,7 @@ const getAllMovies = async (req, res) => {
 
 const getMovie = async (req, res) => {
     try {
-        const { _id } = req.params; 
+        const { _id } = req.params;
 
         // ✅ Check if movie exists
         const movie = await Movies.findById(_id);
@@ -185,7 +185,6 @@ const deleteMovie = async (req, res) => {
     }
 };
 
-module.exports = { getAllMovies, getMovie, deleteMovie };
 
 const addMovie = async (req, res) => {
     try {
@@ -201,16 +200,16 @@ const addMovie = async (req, res) => {
         }
 
         const newMovie = new Movies({
-            title, 
-            year, 
-            genre: genre.split(","), 
-            rating, 
-            trailer, 
-            runtime, 
-            country, 
-            language, 
+            title,
+            year,
+            genre: genre.split(","),
+            rating,
+            trailer,
+            runtime,
+            country,
+            language,
             production,
-            poster, 
+            poster,
             status,
             tickets: {
                 total: totalTickets,
@@ -279,18 +278,15 @@ const logoutadmin = async (req, res) => {
         return res.status(500).json({ success: false, message: "Server error", error: error.message });
     }
 };
-
-
-
-
-
-
-
- 
-
-
-
 module.exports = {
-   
-    allUsersadmin,getUserById,deleteUserById,updateUserById,addMovie,getAllMovies,getMovie,deleteMovie
-,updateMovieById,logoutadmin};
+    allUsersadmin,
+     getUserById,
+      deleteUserById,
+       updateUserById,
+        addMovie,
+         getAllMovies,
+          getMovie,
+           deleteMovie, 
+           updateMovieById, 
+           logoutadmin
+};

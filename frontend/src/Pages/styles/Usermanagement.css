@@ -5,6 +5,7 @@
   color: white;
   background: linear-gradient(to right, #000428, #00021a, #001f3f);
   min-height: 100vh;
+  margin-top: 80px;
 }
 
 /* Cards Layout */

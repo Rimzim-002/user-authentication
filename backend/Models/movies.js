@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const { nanoid } = require("nanoid");
 const moment = require("moment");
+const { nanoid } = require("nanoid");
 
 const movieSchema = new mongoose.Schema({
     movieId: { type: String, default: () => nanoid(10), unique: true },

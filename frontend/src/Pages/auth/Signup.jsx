@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signupUser } from "../../Utils/api";
-import "../styles/signuo.css"; // Import the updated CSS
+import "../styles/signuo.css";
 
 function Signup() {
   const navigate = useNavigate();
@@ -17,6 +17,9 @@ function Signup() {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState("");
+
   // Regex Validation
   const usernameRegex = /^[A-Za-z]{3,}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -24,41 +27,40 @@ function Signup() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormdata((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormdata((prevData) => ({ ...prevData, [name]: value }));
 
     let errorMessage = "";
     if (name === "username" && !usernameRegex.test(value)) {
-      errorMessage = "Username must be at least 3 characters long.";
+      errorMessage = "Username must be at least 3 letters long.";
     } else if (name === "email" && !emailRegex.test(value)) {
       errorMessage = "Please enter a valid email address.";
     } else if (name === "password" && !passwordRegex.test(value)) {
-      errorMessage = "Password must be at least 8 characters with uppercase, lowercase, and a number.";
+      errorMessage =
+        "Password must be at least 8 characters with uppercase, lowercase, and a number.";
     }
 
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: errorMessage,
-    }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
+    setServerError(""); // Clear server error when user types
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (!usernameRegex.test(formdata.username) || !emailRegex.test(formdata.email) || !passwordRegex.test(formdata.password)) {
-      alert("Please correct the errors before submitting.");
+    // Prevent submission if there are errors
+    if (Object.values(errors).some((err) => err) || Object.values(formdata).some((field) => !field)) {
+      setServerError("Please correct the errors before submitting.");
       return;
     }
 
+    setLoading(true);
     try {
-      console.log("Data submitted successfully", formdata);
       await signupUser(formdata);
       setFormdata({ username: "", email: "", password: "" });
       navigate("/login");
     } catch (err) {
-      console.log("Error:", err);
+      setServerError(err.response?.data?.message || "Signup failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,6 +68,7 @@ function Signup() {
     <div className="signup-container">
       <div className="signup-card">
         <h2 className="signup-title">Sign Up</h2>
+        {serverError && <p className="text-danger">{serverError}</p>}
         <form onSubmit={submitHandler}>
           <div className="input-group">
             <label>Name</label>
@@ -103,10 +106,14 @@ function Signup() {
             {errors.password && <p className="text-danger">{errors.password}</p>}
           </div>
 
-          <button type="submit" className="signup-btn">Sign Up</button>
+          <button type="submit" className="signup-btn" disabled={loading}>
+            {loading ? "Signing up..." : "Sign Up"}
+          </button>
 
           <div className="login-link">
-            <p>Already have an account? <Link to="/login">Login</Link></p>
+            <p>
+              Already have an account? <Link to="/login">Login</Link>
+            </p>
           </div>
         </form>
       </div>

@@ -3,15 +3,18 @@ require("dotenv").config();
 const connectDB = require("./Config/dbconnection.js");
 const authRoutes = require("./Routes/authroutes.js");
 const adminRoutes = require("./Routes/adminroutes");
-const  userRoutes= require("./Routes/authroutes.js")
+const  userRoutes= require("./Routes/userroutes.js")
 const path = require("path");
-
 const cors = require("cors");
 const bcrypt = require("bcryptjs"); // ✅ Import bcrypt
 const User = require("./Models/user.js"); // ✅ Import User model
 
-const app = express();
-
+const app = express();app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins for images
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 // CORS Configuration
 const corsOptions = {
   origin: ["http://localhost:3000"], // Allow frontend domain
@@ -19,7 +22,7 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"], // Allow Authorization headers
   credentials: true, // Allow cookies and authentication headers
 };
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.resolve(__dirname, "uploads")));
 
 app.use(cors(corsOptions));
 
@@ -36,7 +39,7 @@ connectDB().then(() => {
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("api/user",userRoutes)
+app.use("/api/user",userRoutes)
 
 // SUPER_ADMIN Creation
 async function createSuperadmin() {

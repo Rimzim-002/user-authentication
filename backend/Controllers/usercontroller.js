@@ -37,25 +37,33 @@ const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Find user
+        // ✅ Find user
         const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) {
-            return Response.error(res, { status: 404, message: "Email already exist" });
+            return Response.error(res, { status: 404, message: Messages.USER.NOT_FOUND }); // ✅ Fixed message
         }
 
-        // Validate password
+        // ✅ Validate password
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return Response.error(res, { status: 401, message: Messages.USER.INVALID_PASSWORD });
         }
 
-        // Generate token without password
-        const token = tokenhandle.generateToken({ id: user._id, email: user.email, role: user.role });
+        // ✅ Generate JWT Token (Ensure `id` is included)
+        const token = tokenhandle.generateToken(user);
 
         return Response.success(res, {
             status: 200,
             message: Messages.USER.LOGIN_SUCCESS,
-            data: { user: { id: user._id, username: user.username, email: user.email ,role: user.role}, token }
+            data: { 
+                user: { 
+                    id: user._id, // ✅ Ensure user ID is returned
+                    username: user.username, 
+                    email: user.email,
+                    role: user.role
+                }, 
+                token 
+            }
         });
 
     } catch (error) {

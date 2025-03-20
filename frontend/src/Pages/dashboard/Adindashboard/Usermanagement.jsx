@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { fetchAdminUsers, deleteUser, updateUser } from "../../Utils/api";
+import { fetchAdminUsers, deleteUser, updateUser } from "../../../Utils/api";
 import { motion } from "framer-motion";
 import { FaUser, FaEnvelope, FaTrash, FaEdit } from "react-icons/fa";
-import Navbar from "../../components/Navbar";
-import "../styles/Usermanagement.css"; // Ensure CSS file is imported
+import Navbar from "../../../components/Navbar";
+import "../../styles/Usermanagement.css"; // Ensure CSS file is imported
 
 function UserManagement() {
     const [users, setUsers] = useState([]);

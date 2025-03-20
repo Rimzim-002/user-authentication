@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { addMovie, getAllMovies, deleteMovie, updateMovie } from "../../Utils/api.js"; // ✅ Added updateMovie
-import Navbar from "../../components/Navbar";
-import "../styles/moviesmanagement.css";
+import { addMovie, getAllMovies, deleteMovie, updateMovie } from "../../../Utils/api.js"; // ✅ Added updateMovie
+import Navbar from "../../../components/Navbar.jsx";
+import "../../styles/moviesmanagement.css";
 
 function MoviesManagement() {
   const [movies, setMovies] = useState([]);
-  console.log(movies,"3456y8o9-]")
+  const [errors, setErrors] = useState({}); // ✅ Error state for validation messages
+
   const [movieData, setMovieData] = useState({
     title: "",
     year: "",
@@ -42,8 +43,35 @@ function MoviesManagement() {
       setMovieData({ ...movieData, [e.target.name]: e.target.value });
     }
   };
+  const validateForm = () => {
+    let errors = {};
+    
+    if (!movieData.title.trim()) errors.title = "Title is required.";
+    if (!movieData.year || movieData.year < 1900 || movieData.year > new Date().getFullYear()) 
+      errors.year = "Enter a valid year. above 1900";
+    if (!movieData.genre.trim()) errors.genre = "Genre is required.";
+    if (!movieData.rating || movieData.rating < 1 || movieData.rating > 10) 
+      errors.rating = "Rating must be between 1 and 10.";
+    if (!movieData.trailer.trim()) errors.trailer = "Trailer URL is required.";
+    if (!movieData.runtime || movieData.runtime <= 0) 
+      errors.runtime = "Runtime must be greater than 0.";
+    if (!movieData.country.trim()) errors.country = "Country is required.";
+    if (!movieData.language.trim()) errors.language = "Language is required( only Hindi, English and Tamil).";
+    if (!movieData.production.trim()) errors.production = "Production is required.";
+    if (!movieData.pricePerTicket || movieData.pricePerTicket <= 0) 
+      errors.pricePerTicket = "Ticket price must be greater than 0.";
+    if (!movieData.totalTickets || movieData.totalTickets <= 0) 
+      errors.totalTickets = "Total tickets must be greater than 0.";
+    if (!movieData.poster && !editingMovie) 
+      errors.poster = "Poster is required.";
+
+    setErrors(errors);
+    return Object.keys(errors).length === 0; // ✅ Returns true if no errors
+  };
 
   const handleSubmit = async (status) => {
+    if (!validateForm()) return; // ✅ Stop submission if validation fails
+
     const formData = new FormData();
     Object.keys(movieData).forEach((key) => {
       formData.append(key, movieData[key]);
@@ -53,10 +81,59 @@ function MoviesManagement() {
     try {
       await addMovie(formData);
       fetchMovies();
+      setMovieData({
+        title: "",
+        year: "",
+        genre: "",
+        rating: "",
+        trailer: "",
+        runtime: "",
+        country: "",
+        language: "",
+        production: "",
+        pricePerTicket: "",
+        totalTickets: "",
+        poster: null,
+      });
+      setErrors({}); // ✅ Clear errors after successful submission
     } catch (error) {
       console.error("Error adding movie:", error);
     }
   };
+
+  const handleUpdate = async () => {
+    if (!validateForm()) return; // ✅ Stop updating if validation fails
+
+    const formData = new FormData();
+    Object.keys(movieData).forEach((key) => {
+      formData.append(key, movieData[key]);
+    });
+
+    try {
+      await updateMovie(editingMovie._id, formData);
+      fetchMovies();
+      setEditingMovie(null);
+      setMovieData({
+        title: "",
+        year: "",
+        genre: "",
+        rating: "",
+        trailer: "",
+        runtime: "",
+        country: "",
+        language: "",
+        production: "",
+        pricePerTicket: "",
+        totalTickets: "",
+        poster: null,
+      });
+      setErrors({}); // ✅ Clear errors after successful update
+    } catch (error) {
+      console.error("Error updating movie:", error);
+    }
+  };
+
+  
 
   const handleDelete = async (id) => {
     try {
@@ -85,20 +162,20 @@ function MoviesManagement() {
     });
   };
 
-  const handleUpdate = async () => {
-    const formData = new FormData();
-    Object.keys(movieData).forEach((key) => {
-      formData.append(key, movieData[key]);
-    });
+  // const handleUpdate = async () => {
+  //   const formData = new FormData();
+  //   Object.keys(movieData).forEach((key) => {
+  //     formData.append(key, movieData[key]);
+  //   });
 
-    try {
-      await updateMovie(editingMovie._id, formData);
-      fetchMovies();
-      setEditingMovie(null);
-    } catch (error) {
-      console.error("Error updating movie:", error);
-    }
-  };
+  //   try {
+  //     await updateMovie(editingMovie._id, formData);
+  //     fetchMovies();
+  //     setEditingMovie(null);
+  //   } catch (error) {
+  //     console.error("Error updating movie:", error);
+  //   }
+  // };
 
   return (
     <>
@@ -109,17 +186,40 @@ function MoviesManagement() {
         {/* Add Movie Form */}
         <div className="add-movie-form">
           <input type="text" name="title" placeholder="Title" onChange={handleChange} value={movieData.title} />
+          {errors.title && <p className="error">{errors.title}</p>}
+
           <input type="number" name="year" placeholder="Year" onChange={handleChange} value={movieData.year} />
+          {errors.year && <p className="error">{errors.year}</p>}
+
           <input type="text" name="genre" placeholder="Genre (comma-separated)" onChange={handleChange} value={movieData.genre} />
+          {errors.genre && <p className="error">{errors.genre}</p>}
+
           <input type="number" name="rating" placeholder="Rating" onChange={handleChange} value={movieData.rating} />
+          {errors.rating && <p className="error">{errors.rating}</p>}
+
           <input type="text" name="trailer" placeholder="Trailer URL" onChange={handleChange} value={movieData.trailer} />
+          {errors.trailer && <p className="error">{errors.trailer}</p>}
+
           <input type="number" name="runtime" placeholder="Runtime (mins)" onChange={handleChange} value={movieData.runtime} />
+          {errors.runtime && <p className="error">{errors.runtime}</p>}
+
           <input type="text" name="country" placeholder="Country" onChange={handleChange} value={movieData.country} />
+          {errors.country && <p className="error">{errors.country}</p>}
+
           <input type="text" name="language" placeholder="Language" onChange={handleChange} value={movieData.language} />
+          {errors.language && <p className="error">{errors.language}</p>}
+
           <input type="text" name="production" placeholder="Production" onChange={handleChange} value={movieData.production} />
+          {errors.production && <p className="error">{errors.production}</p>}
+
           <input type="number" name="pricePerTicket" placeholder="Price per Ticket" onChange={handleChange} value={movieData.pricePerTicket} />
+          {errors.pricePerTicket && <p className="error">{errors.pricePerTicket}</p>}
+
           <input type="number" name="totalTickets" placeholder="Total Tickets" onChange={handleChange} value={movieData.totalTickets} />
+          {errors.totalTickets && <p className="error">{errors.totalTickets}</p>}
+
           <input type="file" name="poster" accept="image/*" onChange={handleChange} />
+          {errors.poster && <p className="error">{errors.poster}</p>}
 
           {editingMovie ? (
             <button onClick={handleUpdate}>Update Movie</button>
@@ -130,6 +230,7 @@ function MoviesManagement() {
             </>
           )}
         </div>
+    
 
        {/* Display Movies */}
 <div className="movies-list">
@@ -189,7 +290,7 @@ function MoviesManagement() {
 </div>
 
 
-      </div>
+      </div>  
     </>
   );
 }

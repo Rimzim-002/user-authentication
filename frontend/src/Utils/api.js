@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { jwtDecode } from "jwt-decode";
 // ✅ Define BASE_URL (Can be changed dynamically)
 export const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
 
@@ -149,6 +149,84 @@ export const updateMovie = async (movieId, formData) => {
         return response.data.data;
     } catch (error) {
         console.error("Error updating movie:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
+export const getAllMoviesUser = async () => {
+    try {
+        const response = await axiosInstance.get("/user/allmovies");
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching movies:", error);
+        throw error;
+    }
+};
+export const getMovie = async (movieId) => {
+    try {
+        const response = await axiosInstance.get(`/user/getmovie/${movieId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching movie details:", error);
+        throw error;
+    }
+};
+
+
+export const bookingmovie = async (movieId, seats, paymentMethod) => {
+    try {
+        const token = localStorage.getItem("authToken");
+        if (!token) throw new Error("User not authenticated");
+
+        // Decode token to get userId
+        const decoded = jwtDecode(token);
+        const userId = decoded.id;
+
+        // Send booking data to backend
+        const bookingData = {
+            ticketsBooked: seats,
+            paymentMethod,
+        };
+
+        // Ensure the movieId is MongoDB _id
+        const response = await axiosInstance.post(`/user/bookticket/${movieId}`, bookingData, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        
+
+        return response.data;  // Ensure the backend sends the full order info
+    } catch (error) {
+        console.error("Error booking movie:", error);
+        throw error;
+    }
+};
+
+export const updatePaymentStatus = async (id, status) => {
+    try {
+        const token = localStorage.getItem("authToken");
+        const response = await axiosInstance.put(`/user/updatepayment/${id}`, 
+            { status }, 
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error updating payment status:", error);
+        throw error;
+    }
+};
+// ✅ Fetch User Orders
+export const getUserOrders = async () => {
+    try {
+        const token = localStorage.getItem("authToken");
+        if (!token) throw new Error("User not authenticated");
+
+        // Send GET request to backend to fetch user orders
+        const response = await axiosInstance.get("/user/getUserOrder", {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        return response.data.orders; // Return the orders data
+    } catch (error) {
+        console.error("Error fetching user orders:", error.response ? error.response.data : error.message);
         throw error;
     }
 };

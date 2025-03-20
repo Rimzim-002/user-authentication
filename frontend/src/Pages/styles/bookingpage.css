@@ -1,0 +1,141 @@
+/* 🌌 Full Page Background */
+.booking-page {
+    background: linear-gradient(to right, #000428, #00021a, #001f3f);
+    padding-top: 70px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 🎟 Booking Card */
+.booking-card {
+    width: 80%;
+    max-width: 500px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+/* 🎞 Movie Poster */
+.booking-poster {
+    width: 100%;
+    max-width: 300px;
+    height: 200px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+/* 🎬 Booking Title */
+.booking-title {
+    font-size: 24px;
+    color: cyan;
+    margin-bottom: 10px;
+}
+
+/* 📜 Booking Info */
+.booking-info p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+/* 🎟 Seat Input */
+.seat-input {
+    width: 50px;
+    padding: 5px;
+    font-size: 16px;
+    margin-top: 5px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid cyan;
+    background: black;
+    color: rgb(218, 40, 40);
+}
+
+/* 💳 Payment Select */
+.payment-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid cyan;
+    background: black;
+    color: rgb(218, 40, 40);
+}
+
+/* ✅ Confirm Button */
+.confirm-btn {
+    margin-top: 20px;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.confirm-btn:hover {
+    background: #e68900;
+    box-shadow: 0 0 10px rgba(255, 152, 0, 0.8);
+}
+
+/* 🖥 Responsive Design */
+@media (max-width: 768px) {
+    .booking-card {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .booking-poster {
+        max-width: 90%;
+        height: auto;
+    }
+}
+.payment-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.payment-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
+
+.confirm-btn {
+    background: #28a745;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: #dc3545;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+

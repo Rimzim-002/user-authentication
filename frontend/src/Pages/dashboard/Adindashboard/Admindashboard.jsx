@@ -1,39 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ Import navigation hook
-import Navbar from "../../components/Navbar";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../../../components/Navbar";
 import { motion } from "framer-motion";
-import { fetchAdminUsers, getAllMovies } from "../../Utils/api";
-import { Users, Film, DollarSign } from "lucide-react"; // ✅ Import icons
+import { fetchAdminUsers, getAllMovies } from "../../../Utils/api";
+import { Users, Film, DollarSign } from "lucide-react";
 
 function Admindashboard() {
-    const navigate = useNavigate(); // ✅ Initialize navigation
+    const navigate = useNavigate();
 
     const [adminData, setAdminData] = useState({
         count: 0,
         movies: 0,
-        totalRevenue: 50000
+        totalRevenue: 0, // ✅ Default is 0
     });
 
     const [cursorPosition, setCursorPosition] = useState({ x: "50%", y: "50%" });
 
     useEffect(() => {
-        const fetchdata = async () => {
+        const fetchData = async () => {
             try {
-                const data = await fetchAdminUsers();
-                const moviesdata = await getAllMovies();
+                const userData = await fetchAdminUsers();
+                const moviesData = await getAllMovies();
+
+                // ✅ Calculate total revenue from all movies
+                const totalRevenue = moviesData?.movies?.reduce((acc, movie) => acc + (movie.pricing?.totalRevenue || 0), 0);
 
                 setAdminData({
-                    count: data?.data?.count || 0,
-                    movies: moviesdata?.count || 0, // ✅ Fixed movies count
-                    totalRevenue: data?.data?.TotalRevenue || 0
+                    count: userData?.data?.count || 0,
+                    movies: moviesData?.movies?.length || 0, // ✅ Ensure correct count
+                    totalRevenue: totalRevenue || 0, // ✅ Store total revenue
                 });
 
             } catch (error) {
-                console.error("Error fetching admin users:", error);
+                console.error("Error fetching data:", error);
             }
         };
     
-        fetchdata();
+        fetchData();
     }, []);
 
     // Track cursor movement
@@ -54,7 +57,7 @@ function Admindashboard() {
         } else if (type === "Total Movies") {
             navigate("/admindashboard/allmovies");
         } else if (type === "Total Revenue") {
-            navigate("/admin/revenue");
+            navigate("/admindashboard/totalRevenue");
         }
     };
 
@@ -72,7 +75,7 @@ function Admindashboard() {
                     {[
                         { title: "Total Users", value: adminData.count, icon: <Users size={30} /> },
                         { title: "Total Movies", value: adminData.movies, icon: <Film size={30} /> },
-                        { title: "Total Revenue", value: `$${adminData.totalRevenue}`, icon: <DollarSign size={30} /> }
+                        { title: "Total Revenue", value: `₹${adminData.totalRevenue.toLocaleString()}`, icon: <DollarSign size={30} /> }
                     ].map((item, index) => (
                         <motion.div
                             key={item.title}
@@ -84,9 +87,9 @@ function Admindashboard() {
                             onClick={() => handleCardClick(item.title)}
                             style={{ cursor: "pointer" }}
                         >
-                            <div className="card-icon">{item.icon}</div> {/* ✅ Icon Added */}
+                            <div className="card-icon">{item.icon}</div>
                             <h3>{item.title}</h3>
-                            <p>{item.value}</p>
+                            <p className="fs-6">{item.value}</p>
                         </motion.div>
                     ))}
                 </div>
