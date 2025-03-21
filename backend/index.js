@@ -5,6 +5,7 @@ const authRoutes = require("./Routes/authroutes.js");
 const adminRoutes = require("./Routes/adminroutes");
 const  userRoutes= require("./Routes/userroutes.js")
 const cors = require("cors");
+const path= require("path")
 const bcrypt = require("bcryptjs"); // ✅ Import bcrypt
 const User = require("./Models/user.js"); // ✅ Import User model
 
