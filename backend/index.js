@@ -14,8 +14,8 @@ connectDB().then(() => {
   console.log(" Connected to MongoDB");
   createSuperadmin(); // ✅ Call the function AFTER connecting to DB
 });
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
 // app.use((req, res, next) => {
 //   res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins for images
@@ -42,7 +42,7 @@ app.get("/test",(req,res)=>{
 // Connect to Database
 
 
-app.use("/uploads", express.static(path.resolve(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
