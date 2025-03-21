@@ -22,6 +22,9 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"], // Allow Authorization headers
   credentials: true, // Allow cookies and authentication headers
 };
+app.get("/test",(req,res)=>{
+  res.json({message:"hellow"})
+})
 app.use("/uploads", express.static(path.resolve(__dirname, "uploads")));
 
 app.use(cors(corsOptions));
