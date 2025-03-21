@@ -1,6 +1,6 @@
 const Order = require("../Models/orders");
 const Movie = require("../Models/movies");
-const { nanoid } = require("nanoid");
+
 const mongoose=require("mongoose")
 
 // 🎟 Create a new booking
