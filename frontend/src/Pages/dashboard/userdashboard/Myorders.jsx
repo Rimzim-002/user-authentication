@@ -10,7 +10,7 @@ const MyOrders = () => {
   const [error, setError] = useState(null);
 
   // Define API Base URL
-  const posterBaseUrl = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+  const posterBaseUrl = process.env.REACT_APP_API_BASE_URL_2 || "http://localhost:5000";
 
   useEffect(() => {
     const fetchOrders = async () => {

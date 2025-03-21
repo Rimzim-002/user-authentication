@@ -43,7 +43,7 @@ console.log(movie,"34567890-")
                         className="movie-details-poster"
                         src={movie?.poster?.startsWith("http")
                             ? movie.poster
-                            : `${process.env.REACT_APP_API_BASE_URL || "http://localhost:5000"}${movie.poster}`}
+                            : `${process.env.REACT_APP_API_BASE_URL_2 || "http://localhost:5000"}${movie.poster}`}
                         alt={movie?.title || "Movie Poster"}
                         onError={(e) => {
                             if (e.target.src !== "/default-poster.jpg") {

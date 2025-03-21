@@ -55,7 +55,7 @@ const TotalRevenue = () => {
                   <tr key={movie._id} className={index === 0 ? "top-seller" : ""}>
                     <td>
                       <img 
-                        src={`${process.env.REACT_APP_API_BASE_URL || "http://localhost:5000"}${movie.poster}`} 
+                        src={`${process.env.REACT_APP_API_BASE_URL_2 || "http://localhost:5000"}${movie.poster}`} 
                         alt={movie.title} 
                         className="movie-poster"
                         onError={(e) => { e.target.src = "/default-poster.jpg"; }} 

@@ -243,7 +243,7 @@ function MoviesManagement() {
   src={
     movie.poster.startsWith("http") 
       ? movie.poster 
-      : `${process.env.REACT_APP_API_BASE_URL || "http://localhost:5000"}${movie.poster}`
+      : `${process.env.REACT_APP_API_BASE_URL_2 || "http://localhost:5000"}${movie.poster}`
   } 
   alt={movie.title} 
   onError={(e) => { e.target.src = "/default-poster.jpg"; }} // ✅ Fallback image
@@ -270,7 +270,7 @@ function MoviesManagement() {
   src={
     movie.poster.startsWith("http") 
       ? movie.poster 
-      : `${process.env.REACT_APP_API_BASE_URL || "http://localhost:5000"}${movie.poster}`
+      : `${process.env.REACT_APP_API_BASE_URL_2 || "http://localhost:5000"}${movie.poster}`
   } 
   alt={movie.title} 
   onError={(e) => { e.target.src = "/default-poster.jpg"; }} // ✅ Fallback image
