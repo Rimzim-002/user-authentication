@@ -1,0 +1,61 @@
+/* 🔹 Search Bar Container (Positions it Below Navbar) */
+.searchbar-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 90px; /* Adjust to match navbar height */
+}
+
+/* 🔹 Pill-Shaped Search Bar */
+.searchbar {
+  width: 50%; /* Adjust width as needed */
+  max-width:300px;
+  display: flex;
+  align-items: center;
+  background: rgba(26, 3, 66, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50px; /* Makes it pill-shaped */
+  padding: 10px 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+/* 🔹 Search Input */
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: white;
+  font-size: 16px;
+  padding-left: 10px;
+}
+
+/* 🔹 Placeholder Text Color */
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 🔹 Search & Clear Icons */
+.search-icon, .clear-icon {
+  color: white;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.clear-icon:hover {
+  color: red;
+}
+
+/* 🔹 Search Bar Focus Effect */
+.searchbar:hover, .search-input:focus {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+/* 📱 Responsive Adjustments */
+@media (max-width: 768px) {
+  .searchbar {
+    width: 80%;
+  }
+}

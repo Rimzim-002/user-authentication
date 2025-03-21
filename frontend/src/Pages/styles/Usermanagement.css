@@ -1,0 +1,123 @@
+/* User Management Container */
+.user-management-container {
+  text-align: center;
+  padding: 20px;
+  color: white;
+  background: linear-gradient(to right, #000428, #00021a, #001f3f);
+  min-height: 100vh;
+  margin-top: 80px;
+}
+
+/* Cards Layout */
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* Individual User Card */
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  width: 250px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+/* User Role Selector */
+.role-selection select {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+
+/* Edit & Delete Buttons */
+/* Edit Modal */
+.edit-modal {
+    position: fixed; /* Ensures the modal stays above everything */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Higher than cards */
+}
+
+/* Modal Content Box */
+.edit-modal-content {
+    background: #222; /* Dark theme */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+    width: 350px;
+    text-align: center;
+    z-index: 1001; /* Ensures it's above overlay */
+}
+
+/* Input & Button Styling */
+.edit-modal-content select {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.save-btn, .cancel-btn {
+    padding: 8px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.save-btn {
+    background: #4CAF50;
+    color: white;
+}
+
+.cancel-btn {
+    background: #ff4c4c;
+    color: white;
+}
+.delete-btn:hover { background: rgba(255, 0, 0, 0.6); }
+/* 📧 Email Styling */
+.card p {
+  font-size: 12px;
+  font-weight: bold;
+  color: cyan;
+}
+.user-email {
+  font-size: 0.94;
+  font-weight:100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Space between icon and text */
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1); /* Subtle background */
+  border-radius: 8px;
+  width: 90%; /* Ensures it stays inside the card */
+  max-width: 220px; /* Prevents overflow */
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 📩 Email Icon */
+.email-icon {
+  color: #5bc0de; /* Light Blue for visibility */
+  font-size: 1.2rem;
+}
