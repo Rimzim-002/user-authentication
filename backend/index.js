@@ -4,41 +4,44 @@ const connectDB = require("./Config/dbconnection.js");
 const authRoutes = require("./Routes/authroutes.js");
 const adminRoutes = require("./Routes/adminroutes");
 const  userRoutes= require("./Routes/userroutes.js")
-const path = require("path");
 const cors = require("cors");
 const bcrypt = require("bcryptjs"); // ✅ Import bcrypt
 const User = require("./Models/user.js"); // ✅ Import User model
 
-const app = express();app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins for images
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
-// CORS Configuration
-const corsOptions = {
-  origin: [process.env.FRONTEND_URL], // Allow frontend domain
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization"], // Allow Authorization headers
-  credentials: true, // Allow cookies and authentication headers
-};
-app.get("/test",(req,res)=>{
-  res.json({message:"hellow"})
-})
-app.use("/uploads", express.static(path.resolve(__dirname, "uploads")));
-
-app.use(cors(corsOptions));
-
-
-// Middleware
-app.use(express.json());
-
-// Connect to Database
+const app = express();
 connectDB().then(() => {
   console.log(" Connected to MongoDB");
   createSuperadmin(); // ✅ Call the function AFTER connecting to DB
 });
+app.use(cors());
+app.use(express.json());
 
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins for images
+//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
+//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//   next();
+// });
+// CORS Configuration
+// const corsOptions = {
+//   origin: [process.env.FRONTEND_URL], // Allow frontend domain
+//   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+//   allowedHeaders: ["Content-Type", "Authorization"], // Allow Authorization headers
+//   credentials: true, // Allow cookies and authentication headers
+// };
+
+app.get("/test",(req,res)=>{
+  res.json({message:"hellow"})
+})
+
+
+
+// Middleware
+
+// Connect to Database
+
+
+app.use("/uploads", express.static(path.resolve(__dirname, "uploads")));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
