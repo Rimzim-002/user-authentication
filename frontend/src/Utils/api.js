@@ -78,7 +78,7 @@ export const deleteUser = async (userId) => {
     }
 
     try {
-        const response = await axios.delete(`${BASE_URL}/admin/deleteuser/${userId}`);
+        const response = await axiosInstance.delete(`/admin/deleteuser/${userId}`);
         console.log(`User ${userId} deleted successfully`, response.data);
         return response.data;
     } catch (error) {
@@ -87,17 +87,22 @@ export const deleteUser = async (userId) => {
     }
 };
 
+// ✅ UPDATE User API (Using axiosInstance)
+export const updateUser = async (userId, userData) => {
+    if (!userId || !userData) {
+        console.error("Error: userId or userData is missing in update request.");
+        return;
+    }
 
-// ✅ UPDATE User API
-    export const updateUser = async (userId, userData) => {
-        try {
-            const response = await axiosInstance.patch(`/admin/edituser/${userId}`, userData);
-            return response.data;
-        } catch (error) {
-            console.error("Error updating user:", error.response ? error.response.data : error.message);
-            throw error;
-        }
-    };
+    try {
+        const response = await axiosInstance.patch(`/admin/edituser/${userId}`, userData);
+        console.log(`User ${userId} updated successfully`, response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error updating user:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
 // ✅ MOVIE APIs
 export const addMovie = async (formData) => {
     try {
