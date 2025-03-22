@@ -7,13 +7,12 @@ const mongoose=require("mongoose")
 
 const createBooking = async (req, res) => {
     try {
-        const { movieId } = req.params; // This movieId is coming from the URL params
+        const { movieId } = req.params;
         const { ticketsBooked, paymentMethod } = req.body;
-        const userId = req.user.id; // Assuming userId is retrieved from the JWT token
+        const userId = req.user.id; // Extracted from JWT token
 
-        // Ensure that the movieId is passed correctly and convert it to ObjectId
-        const movie = await Movie.findById(new mongoose.Types.ObjectId(movieId));  // Use MongoDB _id
-
+        // Find the movie by ID
+        const movie = await Movie.findById(movieId);
         if (!movie) {
             return res.status(404).json({ message: "Movie not found" });
         }
@@ -26,10 +25,10 @@ const createBooking = async (req, res) => {
         // Calculate total amount
         const totalAmount = ticketsBooked * movie.pricing.pricePerTicket;
 
-        // Create the booking order and ensure movieId is stored as ObjectId
+        // Create a new order (MongoDB will generate `_id` automatically)
         const order = new Order({
-            userId,
-            movieId: new mongoose.Types.ObjectId(movieId),  // Convert to ObjectId before saving
+            userId, // Mongoose will handle ObjectId conversion
+            movieId,
             ticketsBooked,
             totalAmount,
             paymentStatus: "pending",
@@ -37,7 +36,7 @@ const createBooking = async (req, res) => {
             paymentMethod,
         });
 
-        console.log("Booking Order:", order); // Debugging log
+        console.log("Booking Order:", order);
 
         // Save the order
         await order.save();
@@ -46,10 +45,13 @@ const createBooking = async (req, res) => {
         movie.tickets.available -= ticketsBooked;
         await movie.save();
 
-        // Send the response with the order data
+        const indexes = await Order.collection.getIndexes();
+console.log(indexes, "indexes");
+
+        // Send the response with the auto-generated `_id`
         res.status(201).json({
             message: "Booking successful",
-            orderId: order._id, // Include the orderId in the response
+            orderId: order._id, // MongoDB `_id` used as order ID
             availableTickets: movie.tickets.available,
         });
     } catch (error) {
@@ -57,6 +59,7 @@ const createBooking = async (req, res) => {
         res.status(500).json({ message: "Server error, please try again" });
     }
 };
+
 const updatePaymentStatus = async (req, res) => {
     try {
         const { orderId } = req.params;
