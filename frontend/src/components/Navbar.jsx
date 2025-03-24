@@ -6,7 +6,7 @@ function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg custom-navbar">
             <div className="container">
- <Link className="navbar-brand d-flex align-items-center" to="/">
+ <Link className="navbar-brand d-flex align-items-center" to="/admindashboard">
                     <img src={brandlogo} alt="brand-logo" className="brand-logo me-2" />
                 </Link>                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span className="navbar-toggler-icon"></span>

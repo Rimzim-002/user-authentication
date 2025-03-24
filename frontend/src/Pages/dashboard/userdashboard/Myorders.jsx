@@ -11,7 +11,6 @@ const MyOrders = () => {
 
   // Define API Base URL
   const posterBaseUrl = process.env.REACT_APP_API_BASE_URL_2 || "http://localhost:5000";
-
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -55,10 +54,14 @@ const MyOrders = () => {
                 <div className="poster-container">
                   <img
                     className="order-movie-poster"
-                    src={`${posterBaseUrl}${order?.movieId?.poster}`}
+                    src={ order?.movieId?.poster.startsWith("http")
+                        ? order.movieId.poster
+                        : `${posterBaseUrl}${order.movieId.poster}`
+                    }
                     alt={order.movieId.title}
-                    onError={(e) => { e.target.src = "/default-movie.jpg"; }}
+                    onError={(e) => { e.target.src = "/default-movie.jpg"; }} // ✅ Fallback image
                   />
+
                 </div>
 
                 {/* Order Info */}

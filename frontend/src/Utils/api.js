@@ -104,10 +104,11 @@ export const updateUser = async (userId, userData) => {
     }
 };
 // ✅ MOVIE APIs
-export const addMovie = async (formData) => {
+// ✅ FIXED: Send JSON instead of FormData
+export const addMovie = async (movieData) => {
     try {
-        const response = await axiosInstance.post("admin/addmovies", formData, {
-            headers: { "Content-Type": "multipart/form-data" },
+        const response = await axiosInstance.post("admin/addmovies", movieData, {
+            headers: { "Content-Type": "application/json" }, // ✅ JSON instead of multipart/form-data
         });
         return response.data;
     } catch (error) {
@@ -115,6 +116,7 @@ export const addMovie = async (formData) => {
         throw error;
     }
 };
+
 
 export const getAllMovies = async () => {
     try {
@@ -146,17 +148,18 @@ export const deleteMovie = async (movieId) => {
     }
 };
 
-export const updateMovie = async (movieId, formData) => {
+export const updateMovie = async (movieId, movieData) => {
     try {
-        const response = await axiosInstance.put(`admin/movie/${movieId}`, formData, {
-            headers: { "Content-Type": "multipart/form-data" },
+        const response = await axiosInstance.put(`admin/movie/${movieId}`, movieData, {
+            headers: { "Content-Type": "application/json" }, // ✅ Send JSON instead of FormData
         });
         return response.data.data;
     } catch (error) {
-        console.error("Error updating movie:", error.response ? error.response.data : error.message);
+        console.error("❌ Error updating movie:", error.response ? error.response.data : error.message);
         throw error;
     }
 };
+
 export const getAllMoviesUser = async () => {
     try {
         const response = await axiosInstance.get("/user/allmovies");
