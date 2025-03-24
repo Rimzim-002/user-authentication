@@ -54,14 +54,15 @@ const TotalRevenue = () => {
                 movies.map((movie, index) => (
                   <tr key={movie._id} className={index === 0 ? "top-seller" : ""}>
                     <td>
-                    <img
+                      <img
                     src={
                       movie.poster.startsWith("http")
                         ? movie.poster  // ✅ Use the URL directly if it's a valid link
                         : `${process.env.REACT_APP_API_BASE_URL_2 || "http://localhost:5000"}${movie.poster}` // ✅ Prepend backend URL for old uploaded images
                     }
                     alt={movie.title}
-                    onError={(e) => { e.target.src = "/default-poster.jpg"; }} // ✅ Fallback image
+                    className="movie-poster"
+                   onError={(e) => { e.target.src = "/default-poster.jpg"; }} // ✅ Fallback image
                   />
                     </td>
                     <td>{movie.title}</td>
