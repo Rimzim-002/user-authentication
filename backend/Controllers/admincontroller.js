@@ -188,28 +188,30 @@ const deleteMovie = async (req, res) => {
 
 const addMovie = async (req, res) => {
     try {
-        const { title, year, genre, rating, trailer, runtime, country, language, production, status, pricePerTicket, totalTickets } = req.body;
+        const { 
+            title, year, genre, rating, trailer, runtime, country, language, production, 
+            status, pricePerTicket, totalTickets, poster 
+        } = req.body; // ✅ Accept poster from req.body instead of req.files
 
         if (!pricePerTicket || !totalTickets) {
             return res.status(400).json({ success: false, message: "Price per ticket and total tickets are required." });
         }
 
-        const poster = req.files?.poster ? `/uploads/${req.files.poster[0].filename}` : null;
         if (!poster) {
-            return res.status(400).json({ success: false, message: "Movie poster is required." });
+            return res.status(400).json({ success: false, message: "Movie poster URL is required." });
         }
 
         const newMovie = new Movies({
             title,
             year,
-            genre: genre.split(","),
+            genre: genre.split(","), // ✅ Ensure genre is stored as an array
             rating,
             trailer,
             runtime,
             country,
             language,
             production,
-            poster,
+            poster, // ✅ Directly store poster URL
             status,
             tickets: {
                 total: totalTickets,
@@ -220,8 +222,8 @@ const addMovie = async (req, res) => {
                 pricePerTicket,
                 totalRevenue: 0
             },
-            createdAt: new Date(), // ✅ Set creation timestamp
-            updatedAt: new Date()  // ✅ Set initial update timestamp
+            createdAt: new Date(),
+            updatedAt: new Date()
         });
 
         await newMovie.save();
@@ -231,6 +233,7 @@ const addMovie = async (req, res) => {
         return res.status(500).json({ success: false, message: "Server Error", error: error.message });
     }
 };
+
 const updateMovieById = async (req, res) => {
     try {
         const { _id } = req.params;

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const upload = require("../Middleware/upload"); // Import Multer middleware
+// const upload = require("../Middleware/upload"); // Import Multer middleware
 const adminMiddleware = require('../Middleware/adminmiddleware');
 
 // ✅ Import Correct Controllers
@@ -25,15 +25,13 @@ router.delete('/deleteuser/:_id', deleteUserById);
 router.patch('/edituser/:_id', updateUserById);
 
 // 📌 ✅ Movie Management
-router.post("/addmovies", upload.fields([
-    { name: "poster", maxCount: 1 },
-    { name: "picture", maxCount: 5 } // Allow multiple pictures
-]), addMovie);
+router.post("/addmovies", addMovie); // ✅ No more `upload.fields` needed
+
 
 router.get("/getallmovies", getAllMovies);
 router.get("/getMovie/:_id", getMovie);
 router.delete("/deleteMovie/:_id", deleteMovie);
-router.put("/movie/:_id", upload.single("poster"), updateMovieById);
+router.put("/movie/:_id", updateMovieById);
 
 // 📌 ✅ Admin Logout
 
