@@ -16,19 +16,19 @@ connectDB().then(() => {
 });
 app.use(express.json());
 const corsOptions = {
-  origin: process.env.FRONTEND_URL, // Allow frontend domain
+  origin: "*", // Allow frontend domain
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization"], // Allow Authorization headers
+  allowedHeaders: ["Content-Type", "Authorization" ,"userRole"], // Allow Authorization headers
   credentials: true, // Allow cookies and authentication headers
 };
 app.use(cors(corsOptions));
 
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins for images
-//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
-//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   next();
-// });
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin","https://frontend-mu-three-55.vercel.app"); // Allow all origins for images
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization,userRole");
+  next();
+});
 // CORS Configuration
 
 
