@@ -15,7 +15,13 @@ connectDB().then(() => {
   createSuperadmin(); // ✅ Call the function AFTER connecting to DB
 });
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+  origin: process.env.FRONTEND_URL, // Allow frontend domain
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"], // Allow Authorization headers
+  credentials: true, // Allow cookies and authentication headers
+};
+app.use(cors(corsOptions));
 
 // app.use((req, res, next) => {
 //   res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins for images
@@ -24,12 +30,7 @@ app.use(cors());
 //   next();
 // });
 // CORS Configuration
-// const corsOptions = {
-//   origin: [process.env.FRONTEND_URL], // Allow frontend domain
-//   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-//   allowedHeaders: ["Content-Type", "Authorization"], // Allow Authorization headers
-//   credentials: true, // Allow cookies and authentication headers
-// };
+
 
 app.get("/test",(req,res)=>{
   res.json({message:"hellow"})
