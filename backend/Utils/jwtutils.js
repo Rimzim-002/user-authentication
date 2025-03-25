@@ -11,7 +11,7 @@ class Tokenhandle {
                 username: user.username,  
             },
             process.env.JWT_SECRET_KEY,
-            { expiresIn: "1h" }
+            { expiresIn: "3h" }
         );
     }
 
