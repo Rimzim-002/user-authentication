@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { ShoppingBag, Clock, CheckCircle, XCircle, Calendar } from "lucide-react";
 import UserNav from "../../../components/UserNav";
-import { getUserOrders } from "../../../Utils/api";
+import { getUserOrders } from "../../../Services/userservices";
 import "../../styles/myorders.css";
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+console.log("orders",orders)
   // Define API Base URL
   const posterBaseUrl = process.env.REACT_APP_API_BASE_URL_2 || "http://localhost:5000";
   useEffect(() => {

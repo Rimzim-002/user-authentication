@@ -1,29 +1,37 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import UserNav from "../../../components/UserNav";
-import { getMovie } from "../../../Utils/api";
+import { getMovie } from "../../../Services/userservices";
 import "../../styles/newmoviedetails.css"; // ✅ Unique CSS file
+import { APP_ROUTES } from "../../../Routes/routes";
 
 const MovieDetails = () => {
     const { movieId } = useParams();
     const navigate = useNavigate();
     const [movie, setMovie] = useState(null);
     const [loading, setLoading] = useState(true);
-console.log(movie,"34567890-")
+
+    console.log(movie, "movies")
+
     // ✅ Memoized API Cal
     const fetchMovieDetails = useCallback(async () => {
         try {
             setLoading(true);
             const response = await getMovie(movieId);
-            setMovie((prevMovie) => 
-                prevMovie?._id === response.movie._id ? prevMovie : response.movie
-            );
+            console.log("API Response:", response);
+
+            if (response?.data) {
+                setMovie((prevMovie) =>
+                    prevMovie?._id === response.data?._id ? prevMovie : response.data
+                );
+            }
         } catch (error) {
             console.error("Error fetching movie details:", error);
         } finally {
             setLoading(false);
         }
     }, [movieId]);
+
 
     useEffect(() => {
         fetchMovieDetails();
@@ -36,7 +44,7 @@ console.log(movie,"34567890-")
             <UserNav />
             <div className="movie-details-card">
                 <h2 className="movie-details-title">{movie?.title}</h2>
-                
+
                 {/* 🎞 Movie Poster */}
                 <div className="movie-details-poster-container">
                     <img
@@ -70,8 +78,10 @@ console.log(movie,"34567890-")
                     ) : (
                         <p>No trailer available</p>
                     )}
-
-                    <button onClick={() => navigate(`/user/dashboard/bookticket/${movie?._id}`)} className="movie-details-btn movie-details-book-btn">
+                    <button
+                        onClick={() => navigate(APP_ROUTES.BOOK_TICKET.replace(":movieId", movie?._id))}
+                        className="movie-details-btn movie-details-book-btn"
+                    >
                         🎟 Book Ticket
                     </button>
                 </div>

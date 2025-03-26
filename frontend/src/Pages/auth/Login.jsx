@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../../Utils/api";
+import { loginUser } from "../../Services/authservices";
+import { APP_ROUTES } from "../../Routes/routes"; // ✅ Import centralized routes
 
 function Login() {
   const navigate = useNavigate();
@@ -32,9 +33,9 @@ function Login() {
         localStorage.setItem("authToken", token);
         localStorage.setItem("userRole", user.role);
         if (user.role === "superadmin") {
-          navigate("/admindashboard");
+          navigate(APP_ROUTES.ADMIN_DASHBOARD);
       } else {
-          navigate("/user/dashboard");
+          navigate(APP_ROUTES.USER_DASHBOARD);
       }
       
         

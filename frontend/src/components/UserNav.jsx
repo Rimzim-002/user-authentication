@@ -4,6 +4,7 @@ import { Home, LogOut, User, ShoppingBag } from "lucide-react"; // Import icons
 import brandlogo from "../Assests/brandlogo.png"; // Ensure correct path
 import "../Pages/styles/usernavbar.css"; // Import custom CSS
 import { jwtDecode } from "jwt-decode";
+import { APP_ROUTES } from "../Routes/routes";
 
 function UserNav() {
     const navigate = useNavigate();
@@ -26,14 +27,14 @@ function UserNav() {
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("role");
-        navigate("/login");
+        navigate(APP_ROUTES.LOGIN);
     };
 
     return (
         <nav className="navbar navbar-expand-lg custom-navbar">
             <div className="container">
                 {/* Glowing Brand Logo */}
-                <Link className="navbar-brand d-flex align-items-center" to="/user/dashboard">
+                <Link className="navbar-brand d-flex align-items-center" to={APP_ROUTES.USER_DASHBOARD}>
                     <img src={brandlogo} alt="brand-logo" className="brand-logo me-2" />
                 </Link>
 
@@ -50,7 +51,7 @@ function UserNav() {
                 {/* Navbar Links */}
                 <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul className="navbar-nav">
-                        <NavItem to="/user/dashboard" icon={<Home size={18} />} text="Home" />
+                        <NavItem to={APP_ROUTES.USER_DASHBOARD} icon={<Home size={18} />} text="Home" />
                         
                         {/* User Dropdown */}
                         <li className="nav-item dropdown">
@@ -64,12 +65,12 @@ function UserNav() {
                             </button>
                             <ul className="dropdown-menu" aria-labelledby="userDropdown">
                                 <li>
-                                    <Link className="dropdown-item" to="/user/dashboard/profile">
+                                    <Link className="dropdown-item" to={APP_ROUTES.PROFILE}>
                                         <User size={16} className="me-2" /> Profile
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link className="dropdown-item" to="/user/dashboard/myorders">
+                                    <Link className="dropdown-item" to={APP_ROUTES.ORDERS}>
                                         <ShoppingBag size={16} className="me-2" /> My Orders
                                     </Link>
                                 </li>

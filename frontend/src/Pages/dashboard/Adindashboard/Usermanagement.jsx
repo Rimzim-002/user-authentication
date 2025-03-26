@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchAdminUsers, deleteUser, updateUser } from "../../../Utils/api";
+import { fetchAdminUsers, deleteUser, updateUser } from "../../../Services/adminservices";
 import { motion } from "framer-motion";
 import { FaUser, FaEnvelope, FaTrash, FaEdit } from "react-icons/fa";
 import Navbar from "../../../components/Navbar";

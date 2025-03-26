@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/Navbar";
 import { motion } from "framer-motion";
-import { fetchAdminUsers, getAllMovies } from "../../../Utils/api";
+import { fetchAdminUsers, getAllMovies } from "../../../Services/adminservices";
 import { Users, Film, DollarSign } from "lucide-react";
+import { APP_ROUTES } from "../../../Routes/routes";
 
 function Admindashboard() {
     const navigate = useNavigate();
@@ -53,11 +54,11 @@ function Admindashboard() {
 
     const handleCardClick = (type) => {
         if (type === "Total Users") {
-            navigate("/admindashboard/allusers");
+            navigate(APP_ROUTES.ADMIN_USERS);
         } else if (type === "Total Movies") {
-            navigate("/admindashboard/allmovies");
+            navigate(APP_ROUTES.ADMIN_MOVIES);
         } else if (type === "Total Revenue") {
-            navigate("/admindashboard/totalRevenue");
+            navigate(APP_ROUTES.ADMIN_TOTAL_REVENUE);
         }
     };
 

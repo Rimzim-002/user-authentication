@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { addMovie, getAllMovies, deleteMovie, updateMovie } from "../../../Utils/api.js"; // ✅ Added updateMovie
+import { addMovie, getAllMovies, deleteMovie, updateMovie } from "../../../Services/adminservices.js"; // ✅ Added updateMovie
 import Navbar from "../../../components/Navbar.jsx";
 import "../../styles/moviesmanagement.css";
 
