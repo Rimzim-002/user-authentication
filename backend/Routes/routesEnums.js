@@ -29,11 +29,17 @@ const ROUTES = {
     ADMIN_EDIT_USER: "/edituser/:_id",
 
     // Movies (Admin)
-    ADD_MOVIE: "/addmovies",
+    ADD_MOVIE: "/addmovie",
     GET_ALL_MOVIES: "/getallmovies",
     ADMIN_GET_MOVIE: "/getMovie/:id",
     DELETE_MOVIE: "/deleteMovie/:id",
     UPDATE_MOVIE: "/updateMovie/:id",
+
+     // Orders
+    BOOKING: "/booking/:id",
+     CONFIRM_PAYMENT: "/payment",
+     GET_ORDERS: "/orders",
+    
 };
 
 module.exports = { ROUTES };

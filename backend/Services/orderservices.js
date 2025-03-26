@@ -1,106 +1,70 @@
-const Order = require("../Models/orders");
-const Movie = require("../Models/movies");
-const mongoose = require("mongoose");
+// services/orderService.js
+const Order = require("../Models/orders.js");
+const Movie = require("../Models/movies.js");
 
-// ✅ Create Booking Service
-const createBookingService = async (userId, movieId, ticketsBooked, paymentMethod) => {
+const createBookingService = async (userId, ticketsBooked, paymentMethod, movieId) => {
     try {
-        const movie = await Movie.aggregate([
-            { $match: { _id: new mongoose.Types.ObjectId(movieId) } },
-            { $project: { availableTickets: 1, title: 1 } },
-        ]);
+        const movie = await Movie.findById(movieId);
+        if (!movie) return { error: "Movie not found" };
 
-        if (!movie.length) {
-            return { error: "Movie not found" };
-        }
-
-        if (movie[0].availableTickets < ticketsBooked) {
+        if (movie.tickets.available < ticketsBooked) {
             return { error: "Not enough tickets available" };
         }
 
-        // Create order
-        const order = await Order.create({
-            userId: new mongoose.Types.ObjectId(userId),
-            movieId: new mongoose.Types.ObjectId(movieId),
+        const totalAmount = ticketsBooked * movie.pricing.pricePerTicket;
+
+        const order = new Order({
+            userId,
+            movieId,
             ticketsBooked,
-            paymentMethod,
+            totalAmount,
             paymentStatus: "pending",
+            orderStatus: "confirmed",
+            paymentMethod,
         });
 
-        // Update available tickets
-        await Movie.updateOne(
-            { _id: new mongoose.Types.ObjectId(movieId) },
-            { $inc: { availableTickets: -ticketsBooked } }
-        );
+        await order.save();
 
-        return { orderId: order._id, availableTickets: movie[0].availableTickets - ticketsBooked };
+        movie.tickets.available -= ticketsBooked;
+        await movie.save();
+
+        return { success: true, orderId: order._id, availableTickets: movie.tickets.available };
     } catch (error) {
-        console.error("Error in createBookingService:", error);
-        return { error: "Failed to create booking" };
+        return { error: error.message };
     }
 };
 
-// ✅ Update Payment Status Service
 const updatePaymentStatusService = async (orderId, status) => {
     try {
-        const updatedOrder = await Order.findByIdAndUpdate(
-            orderId,
-            { paymentStatus: status },
-            { new: true }
-        );
+        const order = await Order.findById(orderId);
+        if (!order) return { error: "Order not found" };
 
-        if (!updatedOrder) {
-            return { error: "Order not found" };
+        order.paymentStatus = status;
+        if (status === "successful") {
+            order.orderStatus = "completed";
+            const movie = await Movie.findById(order.movieId);
+            if (!movie) return { error: "Movie not found" };
+            
+            movie.tickets.sold += order.ticketsBooked;
+            movie.pricing.totalRevenue += order.totalAmount;
+            await movie.save();
         }
-
-        return { order: updatedOrder };
+        await order.save();
+        return { success: true, order };
     } catch (error) {
-        console.error("Error in updatePaymentStatusService:", error);
-        return { error: "Failed to update payment status" };
+        return { error: error.message };
     }
 };
 
-// ✅ Get User Orders using Aggregation
 const getUserOrdersService = async (userId) => {
     try {
-        const orders = await Order.aggregate([
-            { $match: { userId: new mongoose.Types.ObjectId(userId) } },
-            {
-                $lookup: {
-                    from: "movies",
-                    localField: "movieId",
-                    foreignField: "_id",
-                    as: "movieDetails",
-                },
-            },
-            { $unwind: "$movieDetails" },
-            {
-                $project: {
-                    _id: 1,
-                    ticketsBooked: 1,
-                    paymentMethod: 1,
-                    paymentStatus: 1,
-                    createdAt: 1,
-                    "movieDetails.title": 1,
-                    "movieDetails.genre": 1,
-                    "movieDetails.releaseDate": 1,
-                },
-            },
-        ]);
-
-        if (!orders.length) {
-            return { error: "No orders found for this user" };
-        }
-
-        return { orders };
+        const orders = await Order.find({ userId }).populate("movieId"); // ✅ Populate movie details
+        if (!orders.length) return { error: "No orders found" };
+        return { success: true, orders };
     } catch (error) {
-        console.error("Error in getUserOrdersService:", error);
-        return { error: "Failed to fetch user orders" };
+        return { error: error.message };
     }
 };
 
-module.exports = {
-    createBookingService,
-    updatePaymentStatusService,
-    getUserOrdersService,
-};
+
+module.exports = { createBookingService, updatePaymentStatusService, getUserOrdersService };

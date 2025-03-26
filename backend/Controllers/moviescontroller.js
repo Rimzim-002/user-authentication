@@ -3,6 +3,7 @@ const Messages = require("../Utils/messages.js");
 const Response = require("../Utils/apiResponse.js");
 const fs = require("fs");
 const adminServices = require("../Services/adminservices.js");
+const movieService=require("../Services/moviessevices.js")
 const movies = async (req, res) => {
     try {
         const allMovies = await adminServices.getAllMovies();
@@ -49,31 +50,36 @@ const deleteMovie = async (req, res) => {
     }
 };
 
-// ✅ Add Movie
 const addMovie = async (req, res) => {
     try {
-        const newMovie = await adminServices.createMovie(req.body);
-        return Response.success(res, { status: 201, message: "Movie added successfully", data: newMovie });
+        const result = await  movieService.addMovieService (req.body);
+
+        if (result.error) {
+            return Response.error(res, { status: 400, message: result.error });
+        }
+
+        return Response.success(res, { status: 201, message: "Movie added successfully", data: result.data });
     } catch (error) {
-        return Response.error(res, { status: 500, message: Messages.SYSTEM.SERVER_ERROR, error: error.message });
+        return Response.error(res, { status: 500, message: "Server Error", error: error.message });
     }
 };
 
-// ✅ Update Movie
+// 🎬 Controller for updating a movie by ID
 const updateMovie = async (req, res) => {
     try {
         const { id } = req.params;
-        const updatedMovie = await adminServices.updateMovieById(id, req.body);
+        const result = await movieService.updateMovieByIdService(id, req.body, req.file);
 
-        if (!updatedMovie) {
-            return Response.error(res, { status: 404, message: Messages.MOVIE.NOT_FOUND });
+        if (result.error) {
+            return Response.error(res, { status: 404, message: result.error });
         }
 
-        return Response.success(res, { status: 200, message: "Movie updated successfully", data: updatedMovie });
+        return Response.success(res, { status: 200, message: "Movie updated successfully", data: result.data });
     } catch (error) {
-        return Response.error(res, { status: 500, message: Messages.SYSTEM.SERVER_ERROR, error: error.message });
+        return Response.error(res, { status: 500, message: "Something went wrong, please try again", error: error.message });
     }
 };
+
 module.exports={
     movie,movies,deleteMovie,updateMovie,addMovie
 

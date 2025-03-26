@@ -38,8 +38,8 @@ const findMovieById = async (_id) => {
 };
 
 // ✅ Delete a movie by ID
-const deleteMovieById = async (_id) => {
-    const movie = await Movies.findById(_id);
+const deleteMovieById = async (id) => {
+    const movie = await Movies.findById(id);
     if (!movie) return null;
 
     // Delete poster file if it exists
@@ -50,7 +50,7 @@ const deleteMovieById = async (_id) => {
         }
     }
 
-    return await Movies.findByIdAndDelete(_id);
+    return await Movies.findByIdAndDelete(id);
 };
 
 // ✅ Add a new movie

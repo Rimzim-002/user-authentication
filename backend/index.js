@@ -30,7 +30,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://frontend-mu-three-55.vercel.app");
+  // res.setHeader("Access-Control-Allow-Origin", "https://frontend-mu-three-55.vercel.app");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, userRole");
   next();
@@ -47,7 +49,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // ✅ Use Routes with ROUTES Constants
 app.use(ROUTES.AUTH, authRoutes);  // ✅ Using ROUTES.AUTH
 app.use(ROUTES.ADMIN, adminRoutes);
-// app.use(ROUTES.USER, userRoutes);
+app.use(ROUTES.USER, userRoutes);
 
 // ✅ Superadmin Creation
 async function createSuperadmin() {

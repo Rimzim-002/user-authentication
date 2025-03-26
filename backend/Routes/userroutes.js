@@ -1,15 +1,17 @@
-// const express = require('express');
-// const { allMovie, getMovie } = require('../Controllers/usercontrol');
-// const router = express.Router();
-// const authmiddleware= require("../Middleware/authmiddleware");
-// const { createBooking, updatePaymentStatus,getUserOrders } = require('../Controllers/ordercontroller');
-// router.get("/allmovies",authmiddleware,allMovie)
-// router.get("/getmovie/:id",getMovie)
-// router.post("/bookticket/:movieId", authmiddleware, createBooking);
-// router.put("/updatepayment/:orderId",authmiddleware,updatePaymentStatus)
-// router.get("/getUserOrder",authmiddleware,getUserOrders) 
+const express = require("express");
+const app=express();
+const router = express.Router();
+const authMiddleware=require("../Middleware/authmiddleware")
+const { ROUTES } = require("../Routes/routesEnums"); // ✅ Import ROUTES constants
+const { movies, movie } = require("../Controllers/moviescontroller");
+const {createBooking, updatePaymentStatus, getUserOrders} =require("../Controllers/ordercontroller")
+// ✅ AUTH ROUTES
+// app.use(authMiddleware)
+router.get( ROUTES.ALL_MOVIES,movies);
+router.get(ROUTES.GET_MOVIE,movie)
+router.post(ROUTES.BOOKING,authMiddleware,createBooking)
+router.post(ROUTES.CONFIRM_PAYMENT,updatePaymentStatus)
+router.get(ROUTES.GET_ORDERS,authMiddleware,getUserOrders)
 
 
-
-
-// module.exports= router
+module.exports = router;
