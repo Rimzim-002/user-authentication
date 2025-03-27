@@ -1,13 +1,14 @@
 import axios from "axios";
+import API_ROUTES from "./apiroutes";
 import Logger from "./logger"; // ✅ Import centralized logger
 import MESSAGES from "./messages"; // ✅ Import centralized messages
 
 // ✅ Define BASE_URL (Can be changed dynamically)
-export const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
+export const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
 
 // ✅ Create Axios Instance
 const axiosInstance = axios.create({
-    baseURL: BASE_URL,
+    baseURL: `${BASE_URL}${API_ROUTES.API_VERSION}`,
     headers: { "Content-Type": "application/json" },
 });
 

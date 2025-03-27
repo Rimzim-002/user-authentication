@@ -1,20 +1,10 @@
 import API_ROUTES from "../Utils/apiroutes";
 import axiosInstance from "../Utils/axiosinstance";
-// export const fetchUsers = async () => {
-//     try {
-//         const response = await axiosInstance.get(API_ROUTES.ADMIN.FETCH_ALL_USERS);
-//         return response.data;
-//     } catch (error) {
-//         console.error("Error fetching users:", error);
-//         throw error;
-//     }
-// };
 
-// ✅ ADMIN APIs (Fixed Function Name)
 export const fetchAdminUsers = async () => {
     try {
         const response = await axiosInstance.get(API_ROUTES.ADMIN.FETCH_ALL_USERS);
-        return response.data;
+        return response.data.data;
     } catch (error) {
         console.error("Error fetching admin users:", error);
         throw error;
@@ -28,7 +18,7 @@ export const deleteUser  = async (userId) => {
     }
 
     try {
-        const response = await axiosInstance.delete(`/admin/deleteUser/${userId}`);
+        const response = await axiosInstance.delete(API_ROUTES.ADMIN.DELETE_USER(userId));
         console.log(`User ${userId} deleted successfully`, response.data);
         return response.data;
     } catch (error) {
@@ -45,7 +35,7 @@ export const updateUser = async (userId, userData) => {
     }
 
     try {
-        const response = await axiosInstance.patch(`/admin/editUser/${userId}`, userData);
+        const response = await axiosInstance.patch(API_ROUTES.ADMIN.UPDATE_USER(userId), userData);
         console.log(`User ${userId} updated successfully`, response.data);
         return response.data;
     } catch (error) {
@@ -57,7 +47,7 @@ export const updateUser = async (userId, userData) => {
 // ✅ FIXED: Send JSON instead of FormData
 export const addMovie = async (movieData) => {
     try {
-        const response = await axiosInstance.post("admin/addmovie", movieData, {
+        const response = await axiosInstance.post(API_ROUTES.ADMIN.ADD_MOVIE, movieData, {
             headers: { "Content-Type": "application/json" }, // ✅ JSON instead of multipart/form-data
         });
         return response.data;
@@ -78,19 +68,19 @@ export const getAllMovies = async () => {
     }
 };
 
-export const getMovieById = async (movieId) => {
-    try {
-        const response = await axiosInstance.get(`admin/getMovie/${movieId}`);
-        return response.data.data;
-    } catch (error) {
-        console.error("Error fetching movie:", error);
-        throw error;
-    }
-};
+// export const getMovieById = async (movieId) => {
+//     try {
+//         const response = await axiosInstance.get(`admin/getMovie/${movieId}`);
+//         return response.data.data;
+//     } catch (error) {
+//         console.error("Error fetching movie:", error);
+//         throw error;
+//     }
+// };
 
 export const deleteMovie = async (movieId) => {
     try {
-        const response = await axiosInstance.delete(`admin/deleteMovie/${movieId}`);
+        const response = await axiosInstance.delete(API_ROUTES.ADMIN.DETLETE_MOVIE(movieId));
         return response.data.data;
     } catch (error) {
         console.error("Error deleting movie:", error);
@@ -100,7 +90,7 @@ export const deleteMovie = async (movieId) => {
 
 export const updateMovie = async (movieId, movieData) => {
     try {
-        const response = await axiosInstance.put(`admin/updateMovie/${movieId}`, movieData, {
+        const response = await axiosInstance.put(API_ROUTES.ADMIN.UPDATE_MOVIE(movieId), movieData, {
             headers: { "Content-Type": "application/json" }, // ✅ Send JSON instead of FormData
         });
         return response.data.data;

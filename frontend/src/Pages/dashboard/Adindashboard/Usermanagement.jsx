@@ -6,94 +6,72 @@ import Navbar from "../../../components/Navbar";
 import "../../styles/Usermanagement.css"; // Ensure CSS file is imported
 
 function UserManagement() {
-    const [users, setUsers] = useState([]);
+    const [activeUsers, setActiveUsers] = useState([]);
+    const [inactiveUsers, setInactiveUsers] = useState([]);
     const [editUser, setEditUser] = useState(null);
-    const [selectedRole, setSelectedRole] = useState(""); // Store the selected role separately
+    const [selectedRole, setSelectedRole] = useState("");
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const data = await fetchAdminUsers();
-                console.log("🛠 API Response:", data?.data?.users); // Debugging
-
-                setUsers(
-                    data?.data?.users.map(user => ({
-                        userId: user._id, // ✅ Store _id as userId
-                        username: user.username,
-                        email: user.email,
-                        role: user.role
-                    })) || []
-                );
-            } catch (error) {
-                console.error("❌ Error fetching users:", error);
-            }
-        };
-
         fetchUsers();
     }, []);
 
-    // ✅ Handle Delete User
-    const handleDelete = async (userId) => {
-        if (!userId) {
-            console.error("❌ Error: userId is undefined. Check API response.");
-            return;
-        }
-
+    const fetchUsers = async () => {
         try {
-            console.log(`🗑 Deleting user with ID: ${userId}`);
-            await deleteUser(userId);
-            setUsers(users.filter(user => user.userId !== userId)); // ✅ Correct reference
-            console.log(`✅ User with ID ${userId} deleted successfully.`);
+            const data = await fetchAdminUsers();
+            console.log("🛠 API Response:", data?.users);
+
+            // Separate active and inactive users
+            const active = data?.users?.filter(user => user.isActive !== false) || [];
+            const inactive = data?.users?.filter(user => user.isActive === false) || [];
+
+            setActiveUsers(active);
+            setInactiveUsers(inactive);
         } catch (error) {
-            console.error("❌ Error deleting user:", error);
+            console.error("❌ Error fetching users:", error);
         }
     };
 
-    // ✅ Handle Edit Role Only
-    const handleEdit = (user) => {
-        setEditUser(user); // Open modal for this user
-        setSelectedRole(user.role); // Pre-select the current role
-    };
+    // ✅ Handle Move to Inactive (Instead of Delete)
+    const handleMoveToInactive = async (userId) => {
+        if (!userId) return console.error("❌ Error: userId is undefined.");
 
-    // ✅ Handle Save Edit (Only Role Change)
-    const handleSaveEdit = async () => {
-        if (!editUser || !editUser.userId) {
-            console.error("❌ Error: Missing userId or editUser data.");
-            return;
-        }
-    
         try {
-            console.log(`📤 Updating user ID: ${editUser.userId}`);
-    
-            // ✅ Update user in the database
-            await updateUser(editUser.userId, {
-                username: editUser.username,
-                email: editUser.email,
-                role: selectedRole
-            });
-    
-            // ✅ Fetch the updated user list from the backend
-            const updatedData = await fetchAdminUsers();
-            setUsers(
-                updatedData?.data?.users.map(user => ({
-                    userId: user._id,
-                    username: user.username,
-                    email: user.email,
-                    role: user.role
-                })) || []
-            );
-    
-            setEditUser(null); // ✅ Close modal after update
+            console.log(`🗑 Moving user ID: ${userId} to inactive.`);
+            await deleteUser(userId);
+            
+            alert(`✅ User marked as Inactive.`);
+
+            // Refresh user list after marking inactive
+            fetchUsers();
+        } catch (error) {
+            console.error("❌ Error moving user to inactive:", error);
+        }
+    };
+
+    // ✅ Handle Edit Role (Only for Active Users)
+    const handleEdit = (user) => {
+        setEditUser(user);
+        setSelectedRole(user.role);
+    };
+
+    // ✅ Handle Save Edit
+    const handleSaveEdit = async () => {
+        if (!editUser || !editUser._id) return console.error("❌ Error: Missing userId or editUser data.");
+
+        try {
+            console.log(`📤 Updating user ID: ${editUser._id}`);
+
+            await updateUser(editUser._id, { role: selectedRole });
+
+            setEditUser(null);
             console.log(`✅ User Updated Successfully.`);
+
+            // Refresh the user list after edit
+            fetchUsers();
         } catch (error) {
             console.error("❌ Error updating user:", error);
         }
     };
-    
-    
-
-    
-    
 
     return (
         <>
@@ -101,42 +79,79 @@ function UserManagement() {
             <div className="user-management-container">
                 <h1 className="title">User Management</h1>
 
-                {/* Users Cards Section */}
+                {/* Active Users Section */}
+                <h2 className="section-title">Active Users</h2>
                 <div className="cards-container">
-                    {users.map((user, index) => (
-                        <motion.div
-                            key={user.userId}
-                            className="card main-box"
-                            initial={{ opacity: 0, y: 50 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                        >
-                            <div className="user-icon">
-                                <FaUser size={40} />
-                            </div>
-                            <h3 className="user-name">
-                                <FaUser className="icon" /> {user.username}
-                            </h3>
-                            <p className="user-email" title={user.email}>
-                                <FaEnvelope className="icon email-icon" /> {user.email}
-                            </p>
+                    {activeUsers.length > 0 ? (
+                        activeUsers.map((user, index) => (
+                            <motion.div
+                                key={user._id}
+                                className="card main-box active"
+                                initial={{ opacity: 0, y: 50 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                            >
+                                <div className="user-icon">
+                                    <FaUser size={40} />
+                                </div>
+                                <h3 className="user-name">{user.username}</h3>
+                                <p className="user-email">
+                                    <FaEnvelope className="icon email-icon" /> {user.email}
+                                </p>
+                                <p className="user-role"><strong>Role:</strong> {user.role}</p>
 
-                            {/* Role Display */}
-                            <p className="user-role"><strong>Role:</strong> {user.role}</p>
+                                <div className="card-actions">
+                                    <button className="edit-btn" onClick={() => handleEdit(user)}>
+                                        <FaEdit /> Edit Role
+                                    </button>
+                                    <button className="delete-btn" onClick={() => handleMoveToInactive(user._id)}>
+                                        <FaTrash /> Mark Inactive
+                                    </button>
+                                </div>
+                            </motion.div>
+                        ))
+                    ) : (
+                        <p className="no-users">No Active Users</p>
+                    )}
+                </div>
 
-                            {/* Actions */}
-                            <div className="card-actions">
-                                <button className="edit-btn" onClick={() => handleEdit(user)}>
-                                    <FaEdit /> Edit Role
-                                </button>
-                                <button className="delete-btn" onClick={() => handleDelete(user.userId)}>
-                                    <FaTrash /> Delete
-                                </button>
-                            </div>
-                        </motion.div>
-                    ))}
+                {/* Inactive Users Section */}
+                <h2 className="section-title">Inactive Users</h2>
+                <div className="cards-container">
+                    {inactiveUsers.length > 0 ? (
+                        inactiveUsers.map((user, index) => (
+                            <motion.div
+                                key={user._id}
+                                className="card main-box inactive"
+                                initial={{ opacity: 0, y: 50 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                            >
+                                <div className="user-icon">
+                                    <FaUser size={40} />
+                                </div>
+                                <h3 className="user-name">{user.username}</h3>
+                                <p className="user-email">
+                                    <FaEnvelope className="icon email-icon" /> {user.email}
+                                </p>
+                                <p className="user-role"><strong>Role:</strong> {user.role}</p>
+                                <p className="user-inactive-status"><strong>Status:</strong> Inactive</p>
+
+                                <div className="card-actions">
+                                    <button className="edit-btn disabled-btn" disabled>
+                                        <FaEdit /> Edit Role
+                                    </button>
+                                    <button className="delete-btn disabled-btn" disabled>
+                                        <FaTrash /> Delete
+                                    </button>
+                                </div>
+                            </motion.div>
+                        ))
+                    ) : (
+                        <p className="no-users">No Inactive Users</p>
+                    )}
                 </div>
 
                 {/* Edit Role Modal */}
@@ -145,10 +160,7 @@ function UserManagement() {
                         <div className="edit-modal-content">
                             <h3>Edit User Role</h3>
                             <label>Role:</label>
-                            <select
-                                value={selectedRole}
-                                onChange={(e) => setSelectedRole(e.target.value)}
-                            >
+                            <select value={selectedRole} onChange={(e) => setSelectedRole(e.target.value)}>
                                 <option value="user">User</option>
                                 <option value="admin">Admin</option>
                             </select>

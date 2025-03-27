@@ -1,10 +1,11 @@
 
+import API_ROUTES from "../Utils/apiroutes";
 import axiosInstance from "../Utils/axiosinstance";
 
 
 export const getAllMoviesUser = async () => {
     try {
-        const response = await axiosInstance.get("/user/allmMovies");
+        const response = await axiosInstance.get(API_ROUTES.USER.FETCH_ALL_MOVIES  );
         return response.data.data;
     } catch (error) {
         console.error("Error fetching movies:", error);
@@ -13,7 +14,7 @@ export const getAllMoviesUser = async () => {
 };
 export const getMovie = async (movieId) => {
     try {
-        const response = await axiosInstance.get(`/user/getmovie/${movieId}`);
+        const response = await axiosInstance.get(API_ROUTES.USER.FETCH_MOVIE_BY_ID(movieId));
         return response.data;
     } catch (error) {
         console.error("Error fetching movie details:", error);
@@ -33,7 +34,7 @@ export const bookingmovie = async (movieId, seats, paymentMethod) => {
         };
 
         // Ensure the movieId is MongoDB _id
-        const response = await axiosInstance.post(`/user/booking/${movieId}`, bookingData, {
+        const response = await axiosInstance.post(API_ROUTES.USER.BOOK_MOVIE(movieId), bookingData, {
             headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -50,7 +51,7 @@ export const updatePaymentStatus = async (orderId, status) => {
         const token = localStorage.getItem("authToken");
         console.log("Sending payment update request:", { orderId, status }); // Debugging
 
-        const response = await axiosInstance.post(`/user/payment`, 
+        const response = await axiosInstance.post(API_ROUTES.USER.PAYMENT, 
             { orderId, status }, 
             { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -69,7 +70,7 @@ export const getUserOrders = async () => {
         if (!token) throw new Error("User not authenticated");
 
         // Send GET request to backend to fetch user orders
-        const response = await axiosInstance.get("/user/orders", {
+        const response = await axiosInstance.get(API_ROUTES.USER.GET_ORDERS, {
             headers: { Authorization: `Bearer ${token}` }
         });
 

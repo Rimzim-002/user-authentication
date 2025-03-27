@@ -16,7 +16,6 @@ function Admindashboard() {
     });
 
     const [cursorPosition, setCursorPosition] = useState({ x: "50%", y: "50%" });
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -27,7 +26,7 @@ function Admindashboard() {
                 const totalRevenue = moviesData?.movies?.reduce((acc, movie) => acc + (movie.pricing?.totalRevenue || 0), 0);
 
                 setAdminData({
-                    count: userData?.data?.count || 0,
+                    count: userData?.count || 0,
                     movies: moviesData?.movies?.length || 0, // ✅ Ensure correct count
                     totalRevenue: totalRevenue || 0, // ✅ Store total revenue
                 });

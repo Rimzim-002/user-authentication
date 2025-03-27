@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
 import { loginUser } from "../../Services/authservices";
-import { APP_ROUTES } from "../../Routes/routes"; // ✅ Import centralized routes
+import { APP_ROUTES } from "../../Routes/routes";
 
 function Login() {
   const navigate = useNavigate();
@@ -23,32 +24,25 @@ function Login() {
 
     try {
       const response = await loginUser(formdata);
-      console.log("Full response:", response);
       if (response?.data?.token) {
-        const token = response.data.token;
-        const user = response.data.user;
-      
-        console.log("User data:", user, token);
-      
+        const { token, user } = response.data;
         localStorage.setItem("authToken", token);
         localStorage.setItem("userRole", user.role);
-        if (user.role === "superadmin") {
-          navigate(APP_ROUTES.ADMIN_DASHBOARD);
+        toast.success("Login successful!");
+
+        navigate(user.role === "superadmin" ? APP_ROUTES.ADMIN_DASHBOARD : APP_ROUTES.USER_DASHBOARD);
       } else {
-          navigate(APP_ROUTES.USER_DASHBOARD);
-      }
-      
-        
-      } else {
-        console.log("No token received in response:", response.data);
+        toast.error("Login failed. Please try again.");
       }
     } catch (err) {
-      console.error("Login error:", err.response ? err.response.data.data : err.message);
+      const errorResponse = err.response?.data?.message || "An unexpected error occurred.";
+      toast.error(errorResponse);
     }
   };
 
   return (
     <div className="login-container">
+      <Toaster />
       <div className="login-card">
         <h2 className="login-title">Sign In</h2>
         <form onSubmit={submitHandle}>
