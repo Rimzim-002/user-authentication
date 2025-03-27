@@ -3,7 +3,9 @@ const router = express.Router();
 const { ROUTES } = require("../Routes/routesEnums"); // ✅ Import ROUTES constants
 const { user, users, deleteUser,updateUser} = require("../Controllers/usercontrol");
 const { movie,movies,deleteMovie,updateMovie,addMovie} = require("../Controllers/moviescontroller");
-
+const adminmiddleware= require("../Middleware/adminmiddleware")
+const app= express();
+app.use(adminmiddleware)
 // // ✅ USERS ROUTES
 router.get(ROUTES.USERS,users);
 router.get(ROUTES.USERID,user);

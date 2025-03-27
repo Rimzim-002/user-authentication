@@ -18,6 +18,10 @@ const signUpUser = async (req, res) => {
         // ✅ Check if user already exists
         const isUserExist = await authServices.findUserByEmail(email.toLowerCase());
         if (isUserExist) {
+            if (!existingUser.isActive) {
+                return Response.error(res, { status: 400, message: Messages.AUTH.ACCOUNT_INACTIVE });
+
+              }
             return Response.error(res, { status: 400, message: Messages.USER.USER_ALREADY_EXISTS });
         }
 
@@ -49,7 +53,9 @@ const loginUser = async (req, res) => {
         if (!user) {
             return Response.error(res, { status: 404, message: Messages.USER.USER_NOT_FOUND });
         }
-
+        if (!user.isActive) {
+            return Response.error(res, { status: 403, message:Messages.AUTH.ACCOUNT_INACTIVE });
+        }
         // ✅ Validate password
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {

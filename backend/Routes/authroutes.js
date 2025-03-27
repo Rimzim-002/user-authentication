@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { ROUTES } = require("../Routes/routesEnums"); // ✅ Import ROUTES constants
 const { loginUser, signUpUser} = require("../Controllers/authcontroller");
+const app =express();
 
 // ✅ AUTH ROUTES
 router.post(ROUTES.SIGNUP, signUpUser);

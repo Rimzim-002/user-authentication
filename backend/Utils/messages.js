@@ -19,6 +19,7 @@ const Messages = {
         TOKEN_INVALID: "Invalid or expired token",
         ACCESS_DENIED: "Access denied! Unauthorized user",
         SESSION_EXPIRED: "Your session has expired. Please log in again",
+        ACCOUNT_INACTIVE:"Your account is not active any more "
     },
     VALIDATION: {
         REQUIRED_FIELDS: "Please fill in all required fields",

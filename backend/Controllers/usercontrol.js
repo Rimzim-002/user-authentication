@@ -20,18 +20,18 @@ const user = async (req, res) => {
 };
 
 // ✅ Get All Users (Admin)
-const users= async (req, res) => {
+const users = async (req, res) => {
     try {
-        const users = await userservices.getAllUsers();
+        const usersByStatus = await userservices.getAllUsers();
 
-        if (users.length === 0) {
+        if (usersByStatus.length === 0) {
             return Response.error(res, { status: 404, message: Messages.USER.NO_USERS_FOUND });
         }
 
-        return Response.success(res, { 
-            status: 200, 
-            message: "All users with role 'user' and 'admin'",
-            data: { count: users.length, users }
+        return Response.success(res, {
+            status: 200,
+            message: "Users categorized by active and inactive status",
+            data: { count: usersByStatus.length, users: usersByStatus }
         });
     } catch (error) {
         return Response.error(res, { status: 500, message: Messages.SYSTEM.SERVER_ERROR, error: error.message });
@@ -48,7 +48,7 @@ const deleteUser = async (req, res) => {
             return Response.error(res, { status: 404, message: Messages.USER.USER_NOT_FOUND });
         }
 
-        return Response.success(res, { status: 200, message: "User deleted successfully", data: user });
+        return Response.success(res, { status: 200, message: "User deactivated successfully", data: user });
     } catch (error) {
         return Response.error(res, { status: 500, message: Messages.SYSTEM.SERVER_ERROR, error: error.message });
     }

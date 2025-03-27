@@ -22,9 +22,18 @@ const getAllUsers = async () => {
 
 // ✅ Delete User by ID
 const deleteUserById = async (_id) => {
-    if (!mongoose.Types.ObjectId.isValid(_id)) return null;
-    return await User.findByIdAndDelete(_id);
+    try {
+        const user = await User.findByIdAndUpdate(
+            _id,
+            { isActive: false },
+            { new: true } // Return the updated document
+        );
+        return user;
+    } catch (error) {
+        throw new Error(error.message);
+    }
 };
+
 
 // ✅ Update User by ID
 const updateUserById = async (_id, updateData) => {

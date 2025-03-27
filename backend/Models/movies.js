@@ -3,7 +3,6 @@ const moment = require("moment");
 
 
 const movieSchema = new mongoose.Schema({
-    // movieId: { type: String, default: () => nanoid(10), unique: true },
     title: { type: String, required: true, trim: true },
     year: { type: Number, required: true },
     genre: { type: [String], required: true },

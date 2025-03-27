@@ -5,6 +5,7 @@ const { ROUTES } = require("./Routes/routesEnums.js"); // ✅ Import ROUTES cons
 const authRoutes = require("./Routes/authroutes.js");
 const adminRoutes = require("./Routes/adminroutes.js");
 const userRoutes = require("./Routes/userroutes.js");
+const routes= require("./versioning.js")
 const cors = require("cors");
 const path = require("path");
 const bcrypt = require("bcryptjs");
@@ -47,10 +48,10 @@ app.get("/test", (req, res) => {
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ✅ Use Routes with ROUTES Constants
-app.use(ROUTES.AUTH, authRoutes);  // ✅ Using ROUTES.AUTH
-app.use(ROUTES.ADMIN, adminRoutes);
-app.use(ROUTES.USER, userRoutes);
-
+// app.use(ROUTES.AUTH, authRoutes);  // ✅ Using ROUTES.AUTH
+// app.use(ROUTES.ADMIN, adminRoutes);
+// app.use(ROUTES.USER, userRoutes);
+app.use(routes)
 // ✅ Superadmin Creation
 async function createSuperadmin() {
   try {
