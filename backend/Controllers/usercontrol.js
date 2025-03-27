@@ -1,55 +1,74 @@
 require("dotenv").config();
-const Movie = require("../Models/movies.js");
-const mongoose= require("mongoose")
-const allMovie = async (req, res) => {
-    try {
-        const movies = await Movie.find();
-        return res.status(200).json({
-            success: true,
-            message: "Movies found successfully",
-            movies,
-        });
-    } catch (error) {
-        console.error("Error fetching movies:", error);
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-        });
-    }
-};
+const Messages = require("../Utils/messages.js");
+const Response = require("../Utils/apiResponse.js");
+const userservices = require("../Services/userservices.js");
 
-
-
-const getMovie = async (req, res) => {
+// ✅ Get User 
+const user = async (req, res) => {
     try {
         const { id } = req.params;
-        let movie;
-
-        // ✅ Check if `id` is a valid MongoDB ObjectId
-        if (mongoose.Types.ObjectId.isValid(id)) {
-            movie = await Movie.findById(id).populate("createdBy updatedBy", "name email");
-        } 
+        const user = await userservices.findUserById(id);
         
-        // ✅ If no movie found with `_id`, search by `movieId` (Nano ID)
-        if (!movie) {
-            movie = await Movie.findOne({ movieId: id }).populate("createdBy updatedBy", "name email");
+        if (!user) {
+            return Response.error(res, { status: 404, message: Messages.USER.USER_NOT_FOUND });
         }
 
-        if (!movie) {
-            return res.status(404).json({ success: false, message: "Movie not found" });
-        }
-
-        return res.status(200).json({ success: true, movie });
+        return Response.success(res, { status: 200, message: "User found", data: user });
     } catch (error) {
-        console.error("Error fetching movie:", error);
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-            error: error.message,
-        });
+        return Response.error(res, { status: 500, message: Messages.SYSTEM.SERVER_ERROR, error: error.message });
     }
 };
 
+// ✅ Get All Users (Admin)
+const users = async (req, res) => {
+    try {
+        const usersByStatus = await userservices.getAllUsers();
 
+        if (usersByStatus.length === 0) {
+            return Response.error(res, { status: 404, message: Messages.USER.NO_USERS_FOUND });
+        }
 
-module.exports = { allMovie, getMovie };
+        return Response.success(res, {
+            status: 200,
+            message: "Users categorized by active and inactive status",
+            data: { count: usersByStatus.length, users: usersByStatus }
+        });
+    } catch (error) {
+        return Response.error(res, { status: 500, message: Messages.SYSTEM.SERVER_ERROR, error: error.message });
+    }
+};
+
+// ✅ Delete User
+const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await userservices.deleteUserById(id);
+
+        if (!user) {
+            return Response.error(res, { status: 404, message: Messages.USER.USER_NOT_FOUND });
+        }
+
+        return Response.success(res, { status: 200, message: "User deactivated successfully", data: user });
+    } catch (error) {
+        return Response.error(res, { status: 500, message: Messages.SYSTEM.SERVER_ERROR, error: error.message });
+    }
+};
+
+// ✅ Update User
+const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await userservices.updateUserById(id, req.body);
+
+        if (!user) {
+            return Response.error(res, { status: 404, message: Messages.USER.USER_NOT_FOUND });
+        }
+
+        return Response.success(res, { status: 200, message: "User updated successfully", data: user });
+    } catch (error) {
+        return Response.error(res, { status: 500, message: Messages.SYSTEM.SERVER_ERROR, error: error.message });
+    }
+};
+module.exports={
+    user,users,deleteUser,updateUser
+}

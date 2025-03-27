@@ -1,80 +1,83 @@
 const express = require("express");
 require("dotenv").config();
 const connectDB = require("./Config/dbconnection.js");
+const { ROUTES } = require("./Routes/routesEnums.js"); // ✅ Import ROUTES constants
 const authRoutes = require("./Routes/authroutes.js");
-const adminRoutes = require("./Routes/adminroutes");
-const  userRoutes= require("./Routes/userroutes.js")
+const adminRoutes = require("./Routes/adminroutes.js");
+const userRoutes = require("./Routes/userroutes.js");
+const routes= require("./versioning.js")
 const cors = require("cors");
-const path= require("path")
-const bcrypt = require("bcryptjs"); // ✅ Import bcrypt
-const User = require("./Models/user.js"); // ✅ Import User model
+const path = require("path");
+const bcrypt = require("bcryptjs");
+const User = require("./Models/user.js");
 
 const app = express();
+
+// ✅ Connect to DB first, then create Superadmin
 connectDB().then(() => {
-  console.log(" Connected to MongoDB");
-  createSuperadmin(); // ✅ Call the function AFTER connecting to DB
+  console.log("✅ Connected to MongoDB");
+  createSuperadmin();
 });
+
+// ✅ Middleware
 app.use(express.json());
+
 const corsOptions = {
-  origin: "*", // Allow frontend domain
+  origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization" ,"userRole"], // Allow Authorization headers
-  credentials: true, // Allow cookies and authentication headers
+  allowedHeaders: ["Content-Type", "Authorization", "userRole"],
+  credentials: true,
 };
 app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin","https://frontend-mu-three-55.vercel.app"); // Allow all origins for images
+  // res.setHeader("Access-Control-Allow-Origin", "https://frontend-mu-three-55.vercel.app");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization,userRole");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, userRole");
   next();
 });
-// CORS Configuration
 
+// ✅ Test Route
+app.get("/test", (req, res) => {
+  res.json({ message: "Hello, API is working!" });
+});
 
-app.get("/test",(req,res)=>{
-  res.json({message:"hellow"})
-})
-
-
-
-// Middleware
-
-// Connect to Database
-
-
+// ✅ Serve Uploads Folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-// Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/user",userRoutes)
 
-// SUPER_ADMIN Creation
+// ✅ Use Routes with ROUTES Constants
+// app.use(ROUTES.AUTH, authRoutes);  // ✅ Using ROUTES.AUTH
+// app.use(ROUTES.ADMIN, adminRoutes);
+// app.use(ROUTES.USER, userRoutes);
+app.use(routes)
+// ✅ Superadmin Creation
 async function createSuperadmin() {
   try {
     const superadminExists = await User.findOne({ role: "superadmin" });
 
     if (!superadminExists) {
-      const hashedPassword = await bcrypt.hash("SuperAdmin@123", 10); // ✅ Hash password
-
+      const hashedPassword = await bcrypt.hash("SuperAdmin@123", 10);
       const superadmin = new User({
         username: "Rimzim",
         email: "rimzim@gmail.com",
-        password: hashedPassword, // ✅ Store hashed password
+        password: hashedPassword,
         role: "superadmin",
       });
 
       await superadmin.save();
       console.log("✅ Superadmin created successfully!");
     } else {
-      console.log(" Superadmin already exists.");
+      console.log("Superadmin already exists.");
     }
   } catch (error) {
-    console.error(" Error creating superadmin:", error);
+    console.error("❌ Error creating superadmin:", error);
   }
 }
 
+// ✅ Start Server
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-  console.log(` Server is running on http://localhost:${PORT}`);
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });

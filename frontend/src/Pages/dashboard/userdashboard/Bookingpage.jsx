@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { bookingmovie, getMovie, updatePaymentStatus } from "../../../Utils/api";
+import { bookingmovie, getMovie, updatePaymentStatus } from "../../../Services/userservices";
 import { jwtDecode } from "jwt-decode";
 import "../../styles/bookingpage.css";
+import { APP_ROUTES } from "../../../Routes/routes";
 
 const BookingPage = () => {
     const { movieId } = useParams();
@@ -14,7 +15,7 @@ const BookingPage = () => {
     const [userId, setUserId] = useState(null);
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [orderId, setOrderId] = useState(null);
-console.log("id",movieId)
+    console.log("orderid",orderId)
     const token = localStorage.getItem("authToken");
     useEffect(() => {
         if (token) {
@@ -33,8 +34,12 @@ console.log("id",movieId)
         const fetchMovie = async () => {
             try {
                 const response = await getMovie(movieId);
-                if (response && response.movie) {
-                    setMovie(response.movie);
+                console.log("API Response:", response); // Debugging log
+        
+                if (response && response.data) {  // ✅ Correcting the API response structure
+                    setMovie(response.data);
+                } else {
+                    console.error("Error: Movie data missing in response:", response);
                 }
             } catch (error) {
                 console.error("Error fetching movie:", error);
@@ -42,7 +47,7 @@ console.log("id",movieId)
                 setLoading(false);
             }
         };
-
+        
         fetchMovie();
     }, [movieId, token]);
 
@@ -80,17 +85,20 @@ console.log("id",movieId)
 
     const handleConfirmPayment = async () => {
         try {
-            console.log("Booking initiated for movieId:", orderId); // 🔍 Debugging log
-
+            console.log("Confirming payment for Order ID:", orderId); // Debug log
+    
             if (!orderId) {
                 alert("No order ID found.");
                 return;
             }
     
-            await updatePaymentStatus(orderId, "successful");
+            const response = await updatePaymentStatus(orderId, "successful");
+    
+            console.log("Payment Update Response:", response); // Debugging response
+    
             alert("✅ Payment successful! Redirecting...");
             setShowPaymentModal(false);
-            navigate("/user/dashboard");
+            navigate(APP_ROUTES.USER_DASHBOARD);
         } catch (error) {
             console.error("Payment update failed:", error);
             alert("❌ Payment update failed.");

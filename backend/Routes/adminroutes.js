@@ -1,38 +1,27 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-// const upload = require("../Middleware/upload"); // Import Multer middleware
-const adminMiddleware = require('../Middleware/adminmiddleware');
-
-// ✅ Import Correct Controllers
-const { 
-    allUsersadmin, 
-    getUserById, 
-    deleteUserById, 
-    updateUserById, 
-    addMovie, 
-    getAllMovies, 
-    getMovie, 
-    deleteMovie, 
-    updateMovieById, 
-} = require('../Controllers/admincontroller');
-
-router.use(adminMiddleware); // ✅ Apply admin middleware to all routes
-
-// 📌 ✅ User Management
-router.get('/adminusers', allUsersadmin);
-router.get('/getuser/:_id', getUserById);
-router.delete('/deleteuser/:_id', deleteUserById);
-router.patch('/edituser/:_id', updateUserById);
-
-// 📌 ✅ Movie Management
-router.post("/addmovies", addMovie); // ✅ No more `upload.fields` needed
+const { ROUTES } = require("../Routes/routesEnums"); // ✅ Import ROUTES constants
+const { user, users, deleteUser,updateUser} = require("../Controllers/usercontrol");
+const { movie,movies,deleteMovie,updateMovie,addMovie} = require("../Controllers/moviescontroller");
+const adminmiddleware= require("../Middleware/adminmiddleware")
+const app= express();
+app.use(adminmiddleware)
+// // ✅ USERS ROUTES
+router.get(ROUTES.USERS,users);
+router.get(ROUTES.USERID,user);
+router.delete(ROUTES.DELETE_USER,deleteUser);
+router.patch(ROUTES.UPDATE_USER,updateUser)
+// // ✅ MOVIES ROUTES
+router.get(ROUTES.ALL_MOVIES,movies)
+router.get(ROUTES.GET_MOVIE,movie)
+router.delete(ROUTES.DELETE_MOVIE,deleteMovie)
+router.post(ROUTES.ADD_MOVIE,addMovie)
+router.put(ROUTES.UPDATE_MOVIE,updateMovie)
 
 
-router.get("/getallmovies", getAllMovies);
-router.get("/getMovie/:_id", getMovie);
-router.delete("/deleteMovie/:_id", deleteMovie);
-router.put("/movie/:_id", updateMovieById);
 
-// 📌 ✅ Admin Logout
+
+
+
 
 module.exports = router;

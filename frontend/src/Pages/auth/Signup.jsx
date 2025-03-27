@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signupUser } from "../../Utils/api";
+import { signupUser } from "../../Services/authservices"; 
 import "../styles/signuo.css";
+import { APP_ROUTES } from "../../Routes/routes"; // ✅ Import centralized routes
 
 function Signup() {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ function Signup() {
     try {
       await signupUser(formdata);
       setFormdata({ username: "", email: "", password: "" });
-      navigate("/login");
+      navigate(APP_ROUTES.LOGIN);
     } catch (err) {
       setServerError(err.response?.data?.message || "Signup failed. Please try again.");
     } finally {
@@ -112,7 +113,7 @@ function Signup() {
 
           <div className="login-link">
             <p>
-              Already have an account? <Link to="/login">Login</Link>
+              Already have an account? <Link to={APP_ROUTES.LOGIN}>Login</Link>
             </p>
           </div>
         </form>

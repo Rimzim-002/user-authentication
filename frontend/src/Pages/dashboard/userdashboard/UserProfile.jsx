@@ -59,9 +59,9 @@ const UserProfile = () => {
           <p><Shield size={16} /> {user.role}</p>
 
           {/* Edit Profile Button */}
-          <button className="edit-btn">
+          {/* <button className="edit-btn">
             <Pencil size={16} /> Edit Profile
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

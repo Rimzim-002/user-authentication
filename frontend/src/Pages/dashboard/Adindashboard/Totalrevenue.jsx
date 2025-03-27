@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../../../components/Navbar"; // Import Navbar
-import { getAllMovies } from "../../../Utils/api"; // Fetch movies API
+import { getAllMovies } from "../../../Services/adminservices"; // Fetch movies API
 import "../../styles/totalrevenue.css"; // Styling
 
 const TotalRevenue = () => {

@@ -1,55 +1,50 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import Home from "./Pages/dashboard/Homepage";
-import Login from "./Pages/auth/Login";
-import Signup from "./Pages/auth/Signup";
-import Admindashboard from "./Pages/dashboard/Adindashboard/Admindashboard";
-import UserManagement from "./Pages/dashboard/Adindashboard/Usermanagement";
-import Home from "./Pages/dashboard/userdashboard/Homepage";
-import MoviesManagement from "./Pages/dashboard/Adindashboard/Moviesmanagement";
+import { APP_ROUTES } from "./Routes/routes"; // ✅ Import centralized routes
+import ProtectedRoute from "./Routes/ProtectedRoutes"; // ✅ Import ProtectedRoute
+
+import Login from "../src/Pages/auth/Login";
+import Signup from "../src/Pages/auth/Signup";
+import Admindashboard from "../src/Pages/dashboard/Adindashboard/Admindashboard";
+import UserManagement from "../src/Pages/dashboard/Adindashboard/Usermanagement";
+import MoviesManagement from "../src/Pages/dashboard/Adindashboard/Moviesmanagement";
+import TotalRevenue from "../src/Pages/dashboard/Adindashboard/Totalrevenue";
+
 import UserDashboard from "./Pages/dashboard/userdashboard/Userdashboard";
 import MovieDetails from "./Pages/dashboard/userdashboard/Moviedetailpage";
 import BookingPage from "./Pages/dashboard/userdashboard/Bookingpage";
 import UserProfile from "./Pages/dashboard/userdashboard/UserProfile";
 import Myorders from "./Pages/dashboard/userdashboard/Myorders";
-import TotalRevenue from "./Pages/dashboard/Adindashboard/Totalrevenue";
-
-
+import NoAccess from "../src/Routes/ProtectedRoutes"; // ✅ Page for unauthorized users
 
 function App() {
   return (
-
     <Router>
       <Routes>
+        {/* Public Routes */}
+        <Route path={APP_ROUTES.HOME} element={<Signup />} />
+        <Route path={APP_ROUTES.LOGIN} element={<Login />} />
 
-        <Route path="/" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/admindashboard" element={<Admindashboard />} />
-        <Route path="/admindashboard/allusers" element={<UserManagement />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/admindashboard/allmovies" element={<MoviesManagement />} />
-        <Route path="/admindashboard/totalRevenue" element={<TotalRevenue />} />
-        <Route path="/user/dashboard" element={<UserDashboard />} />
-        <Route path="/user/dashboard/getmovie/:movieId" element={<MovieDetails />} />
-        <Route path="/user/dashboard/bookticket/:movieId" element={<BookingPage />} />
-        <Route path="/user/dashboard/profile" element={<UserProfile />} />
-        <Route path="/user/dashboard/myorders" element={<Myorders />} />
+        {/* Protected Admin Routes */}
+        <Route element={<ProtectedRoute allowedRoles={["superadmin"]} />}>
+          <Route path={APP_ROUTES.ADMIN_DASHBOARD} element={<Admindashboard />} />
+          <Route path={APP_ROUTES.ADMIN_USERS} element={<UserManagement />} />
+          <Route path={APP_ROUTES.ADMIN_MOVIES} element={<MoviesManagement />} />
+          <Route path={APP_ROUTES.ADMIN_TOTAL_REVENUE} element={<TotalRevenue />} />
+        </Route>
 
+        {/* Protected User Routes */}
+        <Route element={<ProtectedRoute allowedRoles={["user"]} />}>
+          <Route path={APP_ROUTES.USER_DASHBOARD} element={<UserDashboard />} />
+          <Route path={APP_ROUTES.MOVIE_DETAILS} element={<MovieDetails />} />
+          <Route path={APP_ROUTES.BOOK_TICKET} element={<BookingPage />} />
+          <Route path={APP_ROUTES.PROFILE} element={<UserProfile />} />
+          <Route path={APP_ROUTES.ORDERS} element={<Myorders />} />
+        </Route>
 
-
-
-
-
-
-
-
-
-        <Route />
-
-
+        {/* No Access Route */}
+        <Route path="/no-access" element={<NoAccess />} />
       </Routes>
     </Router>
-
-
   );
 }
 

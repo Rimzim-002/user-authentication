@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Search, X } from "lucide-react"; // Import icons
 import UserNav from "../../../components/UserNav";
-import { getAllMoviesUser } from "../../../Utils/api";
+import { getAllMoviesUser } from "../../../Services/userservices";
 import "../../styles/userdashboard.css";
+import { APP_ROUTES } from "../../../Routes/routes";
 
 function UserDashboard() {
     const [movies, setMovies] = useState([]);
     const [filteredMovies, setFilteredMovies] = useState([]);
     const [selectedLanguage, setSelectedLanguage] = useState("All");
     const [searchQuery, setSearchQuery] = useState(""); // Search query state
-
+    console.log("movies", movies?._id)
     useEffect(() => {
         fetchMovies();
     }, []);
@@ -62,7 +63,7 @@ function UserDashboard() {
             <div className="user-dashboard-main">
                 <UserNav />
                 <div className="user-dashboard-container">
-                    
+
                     {/* Integrated Searchbar */}
                     <div className="searchbar-container">
                         <div className="searchbar">
@@ -135,8 +136,8 @@ function UserDashboard() {
                                             alt={movie.title}
                                             onError={(e) => { e.target.src = "/default-poster.jpg"; }}
                                         />
-                                        <Link to={`/user/dashboard/getmovie/${movie._id}`} className="user-dashboard-title-link">
-                                            <h4>{movie.title}</h4>
+                                        <Link to={`${APP_ROUTES.MOVIE_DETAILS.replace(":movieId", movie?._id)}`} className="user-dashboard-title-link">
+                                            {movie?.title}
                                         </Link>
                                         <p>{movie.genre.join(", ")}</p>
                                         <p className="user-dashboard-language">{movie.language}</p>
