@@ -1,7 +1,7 @@
 
 
 const API_ROUTES = {
-    API_VERSION:"/v1",
+    API_VERSION:"/api/v1",
     AUTH: {
         BASE: "/auth",
         LOGIN: "/auth/login",
