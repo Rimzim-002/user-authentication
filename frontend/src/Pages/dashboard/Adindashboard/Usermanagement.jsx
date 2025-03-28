@@ -140,9 +140,7 @@ function UserManagement() {
                                 <p className="user-inactive-status"><strong>Status:</strong> Inactive</p>
 
                                 <div className="card-actions">
-                                    <button className="edit-btn disabled-btn" disabled>
-                                        <FaEdit /> Edit Role
-                                    </button>
+                                    
                                     <button className="delete-btn disabled-btn" disabled>
                                         <FaTrash /> Delete
                                     </button>

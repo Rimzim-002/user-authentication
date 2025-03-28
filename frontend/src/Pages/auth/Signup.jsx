@@ -24,7 +24,7 @@ function Signup() {
   // Regex Validation
   const usernameRegex = /^[A-Za-z]{3,}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,8 +36,7 @@ function Signup() {
     } else if (name === "email" && !emailRegex.test(value)) {
       errorMessage = "Please enter a valid email address.";
     } else if (name === "password" && !passwordRegex.test(value)) {
-      errorMessage =
-        "Password must be at least 8 characters with uppercase, lowercase, and a number.";
+      errorMessage = "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.";
     }
 
     setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage }));
