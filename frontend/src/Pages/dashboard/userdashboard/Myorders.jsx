@@ -2,15 +2,19 @@ import React, { useState, useEffect } from "react";
 import { ShoppingBag, Clock, CheckCircle, XCircle, Calendar } from "lucide-react";
 import UserNav from "../../../components/UserNav";
 import { getUserOrders } from "../../../Services/userservices";
+import { ClipLoader } from "react-spinners"; // ✅ Import Loader
 import "../../styles/myorders.css";
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-console.log("orders",orders)
+
+  console.log("orders", orders);
+
   // Define API Base URL
   const posterBaseUrl = process.env.REACT_APP_API_BASE_URL_2 || "http://localhost:5000";
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -41,7 +45,10 @@ console.log("orders",orders)
         </h2>
 
         {loading ? (
-          <div className="loading-text">Loading your orders...</div>
+          <div className="loader-container">
+            <ClipLoader size={50} color="#007bff" />
+            <p>Loading your orders...</p>
+          </div>
         ) : error ? (
           <p className="error-text">{error}</p>
         ) : orders.length === 0 ? (
@@ -54,14 +61,13 @@ console.log("orders",orders)
                 <div className="poster-container">
                   <img
                     className="order-movie-poster"
-                    src={ order?.movieId?.poster.startsWith("http")
-                        ? order.movieId.poster
-                        : `${posterBaseUrl}${order.movieId.poster}`
+                    src={order?.movieId?.poster?.startsWith("http")
+                      ? order.movieId.poster
+                      : `${posterBaseUrl}${order.movieId.poster}`
                     }
                     alt={order.movieId.title}
                     onError={(e) => { e.target.src = "/default-movie.jpg"; }} // ✅ Fallback image
                   />
-
                 </div>
 
                 {/* Order Info */}

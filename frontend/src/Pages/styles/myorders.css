@@ -1,10 +1,17 @@
 /* 🌌 Dark Theme Background */
+body {
+    overflow-x: hidden; /* ✅ Prevents horizontal scrolling */
+    margin: 0;
+    padding: 0;
+}
+
 .orders-container {
     background: linear-gradient(to right, #000428, #00021a, #001f3f);
     padding: 100px;
     min-height: 100vh;
     color: white;
     text-align: center;
+    overflow-x: hidden; /* ✅ Prevents horizontal movement */
 }
 
 /* 🛍 Title Styling */
@@ -20,7 +27,7 @@
     text-transform: uppercase;
 }
 
-/* 📝 Orders List (Displays Orders in a Vertical List) */
+/* 📝 Orders List */
 .orders-list {
     display: flex;
     flex-direction: column;
@@ -41,10 +48,12 @@
     cursor: pointer;
     align-items: center;
     gap: 20px;
+    position: relative; /* ✅ Prevents shifting */
 }
 
+/* 🆕 ✅ Moves only UP on hover (No horizontal movement) */
 .order-card-horizontal:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px); /* ✅ Moves only up */
     box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
 }
 

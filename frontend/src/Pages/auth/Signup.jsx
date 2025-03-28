@@ -30,7 +30,7 @@ function Signup() {
   const validateField = (name, value) => {
     let errorMessage = "";
     if (name === "username" && !usernameRegex.test(value)) {
-      errorMessage = "Username must start with a capital letter, allow only one space, and contain valid names.";
+      errorMessage = "Username must start with a capital letter(Ram Sharma)";
     } else if (name === "email" && !emailRegex.test(value)) {
       errorMessage = "Email must contain only lowercase letters.";
     } else if (name === "password" && !passwordRegex.test(value)) {
