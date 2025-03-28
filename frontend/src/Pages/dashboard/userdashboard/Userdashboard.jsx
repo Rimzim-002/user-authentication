@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Search, X } from "lucide-react";
 import UserNav from "../../../components/UserNav";
 import { getAllMoviesUser } from "../../../Services/userservices";
+import { toast, Toaster } from "react-hot-toast";
+
 import "../../styles/userdashboard.css";
 import { APP_ROUTES } from "../../../Routes/routes";
 import { ClipLoader } from "react-spinners"; // Import loader
@@ -60,6 +62,8 @@ function UserDashboard() {
         <>
             <div className="user-dashboard-main">
                 <UserNav />
+                <Toaster position="top-right" />
+
                 <div className="user-dashboard-container">
 
                     {/* Loader */}
@@ -114,7 +118,7 @@ function UserDashboard() {
                                                     alt={movie.title}
                                                     onError={(e) => { e.target.src = "/default-poster.jpg"; }}
                                                 />
-                                                <h4 className="user-dashboard-title-link" onClick={() => alert("Will come soon")}>{movie.title}</h4>
+                                                <h4 className="user-dashboard-title-link" onClick={() => toast.show("Will come soon")}>{movie.title}</h4>
                                                 <p>{movie.genre.join(", ")}</p>
                                                 <p className="user-dashboard-language">{movie.language}</p>
                                                 <button className="user-dashboard-trailer-btn" onClick={() => window.open(movie.trailer, "_blank")}>

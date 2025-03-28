@@ -211,7 +211,7 @@ const handleUpdate = async () => {
           <input type="number" name="year" placeholder="Year" onChange={handleChange} value={movieData.year} />
           {errors.year && <p className="error">{errors.year}</p>}
 
-          <input type="text" name="genre" placeholder="Genre (comma-separated)" onChange={handleChange} value={movieData.genre} />
+          <input type="text" name="genre" placeholder="Genre (comma-separated)eg A" onChange={handleChange} value={movieData.genre} />
           {errors.genre && <p className="error">{errors.genre}</p>}
 
           <input type="number" name="rating" placeholder="Rating" onChange={handleChange} value={movieData.rating} />

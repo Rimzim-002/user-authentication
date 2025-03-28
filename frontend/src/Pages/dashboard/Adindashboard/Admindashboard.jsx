@@ -4,18 +4,21 @@ import Navbar from "../../../components/Navbar";
 import { motion } from "framer-motion";
 import { fetchAdminUsers, getAllMovies } from "../../../Services/adminservices";
 import { Users, Film, DollarSign } from "lucide-react";
+import { ClipLoader } from "react-spinners"; // ✅ Import Loader
 import { APP_ROUTES } from "../../../Routes/routes";
 
 function Admindashboard() {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true); // ✅ State for loader
 
     const [adminData, setAdminData] = useState({
         count: 0,
         movies: 0,
-        totalRevenue: 0, // ✅ Default is 0
+        totalRevenue: 0, 
     });
 
     const [cursorPosition, setCursorPosition] = useState({ x: "50%", y: "50%" });
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -27,12 +30,14 @@ function Admindashboard() {
 
                 setAdminData({
                     count: userData?.count || 0,
-                    movies: moviesData?.movies?.length || 0, // ✅ Ensure correct count
-                    totalRevenue: totalRevenue || 0, // ✅ Store total revenue
+                    movies: moviesData?.movies?.length || 0,
+                    totalRevenue: totalRevenue || 0,
                 });
 
             } catch (error) {
                 console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false); // ✅ Stop loading when data is fetched
             }
         };
     
@@ -70,29 +75,36 @@ function Admindashboard() {
                 {/* Light Effect Following Cursor */}
                 <div className="cursor-light" style={{ left: cursorPosition.x, top: cursorPosition.y }}></div>
 
-                {/* Cards Section */}
-                <div className="cards-container">
-                    {[
-                        { title: "Total Users", value: adminData.count, icon: <Users size={30} /> },
-                        { title: "Total Movies", value: adminData.movies, icon: <Film size={30} /> },
-                        { title: "Total Revenue", value: `₹${adminData.totalRevenue.toLocaleString()}`, icon: <DollarSign size={30} /> }
-                    ].map((item, index) => (
-                        <motion.div
-                            key={item.title}
-                            className="card main-box clickable-card"
-                            initial={{ opacity: 0, y: 50 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.2 }}
-                            whileHover={{ scale: 1.05 }}
-                            onClick={() => handleCardClick(item.title)}
-                            style={{ cursor: "pointer" }}
-                        >
-                            <div className="card-icon">{item.icon}</div>
-                            <h3>{item.title}</h3>
-                            <p className="fs-6">{item.value}</p>
-                        </motion.div>
-                    ))}
-                </div>
+                {/* ✅ Show Loader while fetching data */}
+                {loading ? (
+                    <div className="loader-container">
+                        <ClipLoader size={50} color="#007bff" />
+                        <p>Loading Dashboard...</p>
+                    </div>
+                ) : (
+                    <div className="cards-container">
+                        {[
+                            { title: "Total Users", value: adminData.count, icon: <Users size={30} /> },
+                            { title: "Total Movies", value: adminData.movies, icon: <Film size={30} /> },
+                            { title: "Total Revenue", value: `₹${adminData.totalRevenue.toLocaleString()}`, icon: <DollarSign size={30} /> }
+                        ].map((item, index) => (
+                            <motion.div
+                                key={item.title}
+                                className="card main-box clickable-card"
+                                initial={{ opacity: 0, y: 50 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: index * 0.2 }}
+                                whileHover={{ scale: 1.05 }}
+                                onClick={() => handleCardClick(item.title)}
+                                style={{ cursor: "pointer" }}
+                            >
+                                <div className="card-icon">{item.icon}</div>
+                                <h3>{item.title}</h3>
+                                <p className="fs-6">{item.value}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                )}
             </div>
         </>
     );
