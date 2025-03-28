@@ -1,33 +1,24 @@
 /* 🌌 Dark Themed Background */
 .signup-container {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   background: linear-gradient(to right, #000428, #00021a, #001f3f);
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-}
-
-/* Neon Light Effect Behind the Card */
-.signup-container::before {
-  content: "";
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(0, 102, 255, 0.4) 20%, transparent 70%);
-  filter: blur(100px);
-  z-index: 0;
+  padding: 20px;
+  overflow: hidden; /* Prevent unwanted scrolling */
 }
 
 /* Glassmorphic Signup Card */
 .signup-card {
-  position: relative;
+  width: 400px;
+  max-width: 90%;
   background: rgba(255, 255, 255, 0.08);
   padding: 30px;
   border-radius: 12px;
   text-align: center;
-  width: 400px;
   backdrop-filter: blur(12px);
   box-shadow: 0px 4px 25px rgba(0, 102, 255, 0.4);
   transition: transform 0.3s ease-in-out;
@@ -35,29 +26,17 @@
   z-index: 1;
 }
 
-/* Hover Effect */
-.signup-card:hover {
-  background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0px 6px 35px rgba(0, 102, 255, 0.6);
+/* Make card responsive on smaller screens */
+@media (max-width: 768px) {
+  .signup-card {
+    width: 90%;
+    padding: 20px;
+  }
 }
 
-/* Light Glow Behind Card */
-.signup-card::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 140%;
-  height: 140%;
-  background: radial-gradient(circle, rgba(0, 102, 255, 0.6) 10%, transparent 60%);
-  transform: translate(-50%, -50%);
-  z-index: -1;
-  filter: blur(60px);
-}
-
-/* 🌟 Glowing Sign Up Header */
+/* Glowing Header */
 .signup-title {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: bold;
   margin-bottom: 20px;
   text-transform: uppercase;
@@ -65,16 +44,14 @@
   text-shadow: 0px 0px 15px rgba(0, 102, 255, 0.8);
 }
 
-/* Input Group */
+/* Input Fields */
 .input-group {
   margin-bottom: 15px;
   text-align: left;
 }
 
 .input-group label {
-  display: block;
   font-size: 14px;
-  margin-bottom: 5px;
   color: #f1f1f1;
 }
 
@@ -87,11 +64,20 @@
   color: white;
   outline: none;
   font-size: 16px;
+  transition: all 0.3s ease-in-out;
 }
 
 .input-group input:focus {
   background: rgba(255, 255, 255, 0.3);
   box-shadow: 0px 0px 15px rgba(0, 102, 255, 0.7);
+}
+
+/* Responsive input sizes */
+@media (max-width: 480px) {
+  .input-group input {
+    padding: 10px;
+    font-size: 14px;
+  }
 }
 
 /* Signup Button */
@@ -110,6 +96,14 @@
 .signup-btn:hover {
   background: #003366;
   box-shadow: 0px 0px 18px rgba(0, 102, 255, 0.8);
+}
+
+/* Adjust button for mobile */
+@media (max-width: 480px) {
+  .signup-btn {
+    font-size: 16px;
+    padding: 10px;
+  }
 }
 
 /* Login Link */
