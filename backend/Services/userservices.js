@@ -16,9 +16,11 @@ const findUserById = async (_id) => {
 // ✅ Get All Users using Aggregation
 const getAllUsers = async () => {
     return await User.aggregate([
-        { $project: { password: 0, __v: 0 } } // Excluding password and version fields
+        { $match: { role: { $in: ["user", "admin"] } } }, // ✅ Only include "user" and "admin"
+        { $project: { password: 0, __v: 0 } } // ✅ Exclude password and version fields
     ]);
 };
+
 
 // ✅ Delete User by ID
 const deleteUserById = async (_id) => {
