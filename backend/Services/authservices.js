@@ -2,8 +2,9 @@ const User = require("../Models/user");
 
 // ✅ Find user by email
 const findUserByEmail = async (email) => {
-    return await User.findOne({ email: email.toLowerCase() });
+    return await User.findOne({ email: email.toLowerCase() }).select("+password");
 };
+
 
 // ✅ Create a new user
 const createUser = async (username, email, hashedPassword) => {
