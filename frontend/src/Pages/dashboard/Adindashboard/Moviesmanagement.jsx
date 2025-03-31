@@ -215,6 +215,8 @@ const handleUpdate = async () => {
     <>
       <Navbar />
       <div className="movies-management-container">
+      <Toaster position="top-right" />
+
         <h2>Movie Management</h2>
 
         {/* Add Movie Form */}
