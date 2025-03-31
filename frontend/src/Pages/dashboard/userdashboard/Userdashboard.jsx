@@ -13,7 +13,7 @@ function UserDashboard() {
     const [movies, setMovies] = useState([]);
     const [filteredMovies, setFilteredMovies] = useState([]);
     const [selectedLanguage, setSelectedLanguage] = useState("All");
-    const [searchQuery, setSearchQuery] = useState(""); 
+    const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(true); // Loader state
 
     useEffect(() => {
@@ -57,7 +57,9 @@ function UserDashboard() {
         setSearchQuery("");
         filterMoviesByLanguage(selectedLanguage);
     };
-
+    const upcomingMessage = () => {
+        toast("Will come soon");
+    };
     return (
         <>
             <div className="user-dashboard-main">
@@ -118,8 +120,9 @@ function UserDashboard() {
                                                     alt={movie.title}
                                                     onError={(e) => { e.target.src = "/default-poster.jpg"; }}
                                                 />
-                                                <h4 className="user-dashboard-title-link" onClick={() => toast.show("Will come soon")}>{movie.title}</h4>
-                                                <p>{movie.genre.join(", ")}</p>
+                                                <h4 className="user-dashboard-title-link" onClick={upcomingMessage}>
+                                                    {movie.title}
+                                                </h4>                                                <p>{movie.genre.join(", ")}</p>
                                                 <p className="user-dashboard-language">{movie.language}</p>
                                                 <button className="user-dashboard-trailer-btn" onClick={() => window.open(movie.trailer, "_blank")}>
                                                     🎥 Watch Trailer

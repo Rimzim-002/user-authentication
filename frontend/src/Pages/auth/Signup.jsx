@@ -62,7 +62,7 @@ function Signup() {
     setLoading(true);
     try {
       await signupUser(formdata);
-      toast.success("Signup successful! Redirecting to login...");
+      toast.success("Signup successful!");
       setTimeout(() => navigate(APP_ROUTES.LOGIN), 2000);
       setFormdata({ username: "", email: "", password: "" });
     } catch (err) {

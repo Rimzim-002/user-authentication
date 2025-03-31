@@ -21,7 +21,6 @@ const authMiddleware = async (req, res, next) => {
         // ✅ Decode Token
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-        console.log("Decoded Token:", decoded); // ✅ Debugging
 
         if (!decoded.id) {
             return response.error(res, { status: 401, message: "Invalid token: User ID is missing" });
@@ -29,7 +28,6 @@ const authMiddleware = async (req, res, next) => {
 
         // ✅ Fetch User from Database
         const user = await User.findById(decoded.id).select("-password");
-        console.log("User from DB:", user); // ✅ Debugging
 
         if (!user) {
             return response.error(res, { status: 401, message: "Unauthorized: User not found in database" });

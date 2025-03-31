@@ -53,7 +53,7 @@ const BookingPage = () => {
 
     const handleBooking = async () => {
         if (!paymentMethod) {
-            toast.error(" Please select a payment method!", { duration: 3000 });
+            toast.error(" Please select a payment method!", { duration: 2000 });
             return;
         }
         if (!userId) {
@@ -83,7 +83,7 @@ const BookingPage = () => {
             }
 
             await updatePaymentStatus(orderId, "successful");
-            toast.success(" Payment successful! Redirecting...");
+            toast.success(" Payment successful!");
             setShowPaymentModal(false);
             navigate(APP_ROUTES.USER_DASHBOARD);
         } catch (error) {
