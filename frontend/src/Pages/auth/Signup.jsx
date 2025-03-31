@@ -80,7 +80,7 @@ function Signup() {
         <form onSubmit={submitHandler}>
           <div className="input-group">
             <label>Name</label>
-            <input type="text" name="username" value={formdata.username} onChange={handleChange} onBlur={handleBlur} placeholder="Enter your name" />
+            <input type="text" name="username" value={formdata.username} onChange={handleChange} onBlur={handleBlur} placeholder="Enter your Fullname " />
             {errors.username && <p className="text-danger">{errors.username}</p>}
           </div>
           <div className="input-group">

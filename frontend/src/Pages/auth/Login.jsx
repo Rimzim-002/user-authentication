@@ -28,7 +28,7 @@ function Login() {
     if (name === "email" && !emailRegex.test(value)) {
       errorMessage = "Please enter a valid email address.";
     } else if (name === "password" && !passwordRegex.test(value)) {
-      errorMessage = "Password must be at least 6 characters long and include a letter and a number.";
+      errorMessage = "Password must be 8+ characters, including uppercase, lowercase, number, and special character.";
     }
     return errorMessage;
   };
