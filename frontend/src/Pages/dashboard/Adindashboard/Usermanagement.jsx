@@ -156,9 +156,7 @@ function UserManagement() {
                                         <p className="user-inactive-status"><strong>Status:</strong> Inactive</p>
 
                                         <div className="card-actions">
-                                            <button className="delete-btn disabled-btn" disabled>
-                                                <FaTrash /> Delete
-                                            </button>
+                                           
                                         </div>
                                     </motion.div>
                                 ))

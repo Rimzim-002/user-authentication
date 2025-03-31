@@ -34,7 +34,7 @@ function Signup() {
     } else if (name === "email" && !emailRegex.test(value)) {
       errorMessage = "Email must contain only lowercase letters.";
     } else if (name === "password" && !passwordRegex.test(value)) {
-      errorMessage = "Password must be 8+ characters, including uppercase, lowercase, number, and special character. Cannot contain 'password'.";
+      errorMessage = "Password must be 8+ characters, including uppercase, lowercase, number, and special character.";
     }
     return errorMessage;
   };
