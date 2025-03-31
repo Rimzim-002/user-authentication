@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { addMovie, getAllMovies, deleteMovie, updateMovie } from "../../../Services/adminservices.js"; // ✅ Added updateMovie
 import Navbar from "../../../components/Navbar.jsx";
 import "../../styles/moviesmanagement.css";
+import { toast, Toaster } from "react-hot-toast";
 
 function MoviesManagement() {
   const [movies, setMovies] = useState([]);
@@ -33,6 +34,8 @@ function MoviesManagement() {
       setMovies(response.movies);
     } catch (error) {
       console.error("Error fetching movies:", error);
+      toast.error("Failed to fetch movies!");
+
     }
   };
 
@@ -109,7 +112,11 @@ console.log(movieData,"movie data")
             poster: "",
         });
         setErrors({});
+        toast.success("Movie added successfully!");
+
     } catch (error) {
+      toast.error("Error adding movie!");
+
         console.error("❌ Error adding movie:", error);
     }
 };
@@ -145,9 +152,12 @@ const handleUpdate = async () => {
           totalTickets: "",
           poster: "",
       });
-      setErrors({}); // ✅ Clear errors after successful update
+      setErrors({});
+      toast.success("Movie updated successfully!");
+      // ✅ Clear errors after successful update
   } catch (error) {
-      console.error("❌ Error updating movie:", error);
+    toast.error("Error updating movie!");
+    console.error("❌ Error updating movie:", error);
   }
 };
 
@@ -158,8 +168,12 @@ const handleUpdate = async () => {
     try {
       await deleteMovie(id);
       fetchMovies();
+      toast.success("Movie deleted successfully!");
+
     } catch (error) {
       console.error("Error deleting movie:", error);
+      toast.error("Error deleting movie!");
+
     }
   };
 
