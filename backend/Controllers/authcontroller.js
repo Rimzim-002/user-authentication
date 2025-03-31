@@ -16,14 +16,15 @@ const signUpUser = async (req, res) => {
         }
 
         // ✅ Check if user already exists
-        const isUserExist = await authServices.findUserByEmail(email.toLowerCase());
-        if (isUserExist) {
-            if (!existingUser.isActive) {
+        const existingUser = await authServices.findUserByEmail(email.toLowerCase());
+        if (existingUser) {  
+            if (existingUser.isActive === false) {
                 return Response.error(res, { status: 400, message: Messages.AUTH.ACCOUNT_INACTIVE });
+            }
 
-              }
             return Response.error(res, { status: 400, message: Messages.USER.USER_ALREADY_EXISTS });
         }
+
 
         // ✅ Hash password securely
         const hashedPassword = await bcrypt.hash(password, 12);
@@ -54,7 +55,7 @@ const loginUser = async (req, res) => {
             return Response.error(res, { status: 404, message: Messages.USER.USER_NOT_FOUND });
         }
         if (!user.isActive) {
-            return Response.error(res, { status: 403, message:Messages.AUTH.ACCOUNT_INACTIVE });
+            return Response.error(res, { status: 403, message: Messages.AUTH.ACCOUNT_INACTIVE });
         }
         // ✅ Validate password
         const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -68,13 +69,13 @@ const loginUser = async (req, res) => {
         return Response.success(res, {
             status: 200,
             message: Messages.USER.LOGIN_SUCCESS,
-            data: { 
-                user: { 
+            data: {
+                user: {
                     id: user._id,
-                    username: user.username, 
+                    username: user.username,
                     email: user.email,
                     role: user.role
-                }, 
+                },
                 token
             }
         });
@@ -90,5 +91,5 @@ const loginUser = async (req, res) => {
 module.exports = {
     signUpUser,
     loginUser,
-   
+
 };
