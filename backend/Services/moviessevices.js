@@ -1,24 +1,38 @@
 const Movie = require("../Models/movies");
 const mongoose = require("mongoose");
 
-// ✅ Get All Movies using Aggregation
-const getAllMovies = async () => {
-    return await Movie.aggregate([
-        { 
-            $project: { 
-                _id: 1, 
-                title: 1, 
-                genre: 1, 
-                releaseDate: 1, 
-                status: 1, 
-                ticketPrice: 1, 
-                availableTickets: 1,
-                createdAt: 1,
-                updatedAt: 1
-            } 
-        }
+
+const getAllMovies = async (searchQuery, page, limit, sortField, sortOrder) => {
+    const matchResult = {};
+
+    // Searching
+    if (searchQuery) {
+        const regex = new RegExp(searchQuery, "i");
+        matchResult.$or = [
+            { title: { $regex: regex } },
+            { genre: { $regex: regex } },
+            { status: { $regex: regex } }
+        ];
+    }
+
+    const movies = await Movie.aggregate([
+        { $match: { ...matchResult } }, // No filtering on deleted status
+        { $project: { /* your projection fields */ } },
+        { $sort: { [sortField]: sortOrder === "asc" ? 1 : -1 } },
+        { $skip: (page - 1) * limit },
+        { $limit: limit }
     ]);
+
+    const totalCount = await Movie.countDocuments({ ...matchResult });
+
+    return {
+        movies,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+        currentPage: page
+    };
 };
+
 
 // ✅ Find Movie by ID using Aggregation
 const findMovieById = async (_id) => {

@@ -38,11 +38,18 @@ const movie = async (req, res) => {
 const deleteMovie = async (req, res) => {
     try {
         const { id } = req.params;
-        const movie = await adminServices.deleteMovieById(id);
+
+        // Find the movie by ID
+        const movie = await adminServices.findMovieById(id); // Assuming you have a method to find the movie
 
         if (!movie) {
             return Response.error(res, { status: 404, message: Messages.MOVIE.NOT_FOUND });
         }
+
+        // Soft delete the movie by setting the deleted flag to true and updating the deletedAt timestamp
+        movie.deleted = true; // Mark as deleted
+        movie.deletedAt = new Date(); // Set the deletion timestamp
+        await movie.save(); // Save the changes
 
         return Response.success(res, { status: 200, message: "Movie deleted successfully" });
     } catch (error) {
