@@ -5,7 +5,7 @@ import { ClipLoader } from "react-spinners"; // ✅ Import Loader
 import "../../styles/totalrevenue.css"; // Styling
 
 const TotalRevenue = () => {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState([]); // State for all movies
   const [loading, setLoading] = useState(true); // ✅ Loader state
 
   useEffect(() => {
@@ -17,13 +17,7 @@ const TotalRevenue = () => {
     try {
       const response = await getAllMovies();
       if (response && response.movies) {
-        // ✅ Filter out upcoming movies, only show "now playing" movies
-        const filteredMovies = response.movies.filter(movie => movie.status === "now_playing");
-
-        // ✅ Sort movies by tickets sold (highest first)
-        const sortedMovies = filteredMovies.sort((a, b) => b.tickets.sold - a.tickets.sold);
-        
-        setMovies(sortedMovies);
+        setMovies(response.movies); // Set all movies
       }
     } catch (error) {
       console.error("Error fetching movies:", error);
@@ -57,12 +51,13 @@ const TotalRevenue = () => {
                   <th>Left</th>
                   <th>Price (₹)</th>
                   <th>Total Revenue (₹)</th>
+                  <th>Status</th> {/* New column for status */}
                 </tr>
               </thead>
               <tbody>
                 {movies.length > 0 ? (
-                  movies.map((movie, index) => (
-                    <tr key={movie._id} className={index === 0 ? "top-seller" : ""}>
+                  movies.map((movie) => (
+                    <tr key={movie._id} className={movie.deleted ? "deleted-movie" : "active-movie"}>
                       <td>
                         <img
                           src={
@@ -83,11 +78,18 @@ const TotalRevenue = () => {
                       <td>{movie.tickets.available}</td>
                       <td>₹{movie.pricing.pricePerTicket}</td>
                       <td className="total-revenue">₹{movie.pricing.totalRevenue}</td>
+                      <td>
+                        {movie.deleted ? (
+                          <span className="deleted-indicator">Deleted</span> // Indicate deleted status
+                        ) : (
+                          <span className="active-indicator">Active</span> // Indicate active status
+                        )}
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="9">No movies available.</td>
+                    <td colSpan="10">No movies available.</td>
                   </tr>
                 )}
               </tbody>

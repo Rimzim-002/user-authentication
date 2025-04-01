@@ -21,7 +21,7 @@ const MyOrders = () => {
         const fetchedOrders = await getUserOrders();
         setOrders(fetchedOrders);
       } catch (err) {
-        setError("Failed to load orders. Please try again later.");
+        setError("No orders");
       } finally {
         setLoading(false);
       }

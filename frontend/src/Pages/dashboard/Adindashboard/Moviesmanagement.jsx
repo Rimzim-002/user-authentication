@@ -7,7 +7,7 @@ import { toast, Toaster } from "react-hot-toast";
 function MoviesManagement() {
   const [movies, setMovies] = useState([]);
   const [errors, setErrors] = useState({}); // ✅ Error state for validation messages
-
+  const[deletedmovies,setdeteletdmovies]=useState({})
   const [movieData, setMovieData] = useState({
     title: "",
     year: "",
@@ -23,6 +23,7 @@ function MoviesManagement() {
     poster: null,
   });
   const [editingMovie, setEditingMovie] = useState(null);
+  const [showForm, setShowForm] = useState(false); // State to control form visibility
 
   useEffect(() => {
     fetchMovies();
@@ -30,26 +31,27 @@ function MoviesManagement() {
 
   const fetchMovies = async () => {
     try {
-      const response = await getAllMovies();
-      setMovies(response.movies);
+        const response = await getAllMovies();
+        setMovies(response.movies.filter(movie => !movie.deleted)); // Exclude deleted movies
+
+        // Filter out deleted movies for a separate state if needed
+        const deletedMovies = response.movies.filter(movie => movie.deleted === true);
+        setdeteletdmovies(deletedMovies);
     } catch (error) {
-      console.error("Error fetching movies:", error);
-      toast.error("Failed to fetch movies!");
-
+        console.error("Error fetching movies:", error);
+        toast.error("Failed to fetch movies!");
     }
-  };
-
+};
+console.log(deletedmovies,"deleted")
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     setMovieData({
-        ...movieData,
-        [name]: ["year", "rating", "pricePerTicket", "totalTickets"].includes(name) ? Number(value) : value,
+      ...movieData,
+      [name]: ["year", "rating", "pricePerTicket", "totalTickets"].includes(name) ? Number(value) : value,
     });
-};
+  };
 
-
-console.log(movieData,"movie data")
   const validateForm = () => {
     let errors = {};
     const allowedLanguages = ["hindi", "tamil", "english"]; // ✅ Only these languages are allowed
@@ -81,199 +83,191 @@ console.log(movieData,"movie data")
     return Object.keys(errors).length === 0; // ✅ Returns true if no errors
   };
 
-
   const handleSubmit = async (status) => {
     if (!validateForm()) return; // ✅ Stop submission if validation fails
 
     const moviePayload = { 
-        ...movieData, 
-        status,
-        pricePerTicket: Number(movieData.pricePerTicket),  // ✅ Ensure it's a number
-        totalTickets: Number(movieData.totalTickets)       // ✅ Ensure it's a number
+      ...movieData, 
+      status,
+      pricePerTicket: Number(movieData.pricePerTicket),  // ✅ Ensure it's a number
+      totalTickets: Number(movieData.totalTickets)       // ✅ Ensure it's a number
     };
 
     console.log("🚀 Submitting Movie Data:", moviePayload); // ✅ Debugging log
 
     try {
-        await addMovie(moviePayload);
-        fetchMovies();
-        setMovieData({
-            title: "",
-            year: "",
-            genre: "",
-            rating: "",
-            trailer: "",
-            runtime: "",
-            country: "",
-            language: "",
-            production: "",
-            pricePerTicket: "",
-            totalTickets: "",
-            poster: "",
-        });
-        setErrors({});
-        toast.success("Movie added successfully!");
+      await addMovie(moviePayload);
+      fetchMovies();
+      resetForm();
+      toast.success("Movie added successfully!");
 
     } catch (error) {
       toast.error("Error adding movie!");
-
-        console.error("❌ Error adding movie:", error);
+      console.error("❌ Error adding movie:", error);
     }
-};
+  };
 
+  const handleUpdate = async () => {
+    if (!validateForm()) return; // ✅ Stop updating if validation fails
 
-
-const handleUpdate = async () => {
-  if (!validateForm()) return; // ✅ Stop updating if validation fails
-
-  const updatedMovie = {
+    const updatedMovie = {
       ...movieData,
       pricePerTicket: Number(movieData.pricePerTicket), // ✅ Ensure it's a number
       totalTickets: Number(movieData.totalTickets) // ✅ Ensure it's a number
-  };
+    };
 
-  console.log("🚀 Updating Movie Data:", updatedMovie); // ✅ Debugging log
+    console.log("🚀 Updating Movie Data:", updatedMovie); // ✅ Debugging log
 
-  try {
+    try {
       await updateMovie(editingMovie._id, updatedMovie); // ✅ Send JSON instead of FormData
       fetchMovies();
-      setEditingMovie(null);
-      setMovieData({
-          title: "",
-          year: "",
-          genre: "",
-          rating: "",
-          trailer: "",
-          runtime: "",
-          country: "",
-          language: "",
-          production: "",
-          pricePerTicket: "",
-          totalTickets: "",
-          poster: "",
-      });
-      setErrors({});
+      resetForm();
       toast.success("Movie updated successfully!");
-      // ✅ Clear errors after successful update
-  } catch (error) {
-    toast.error("Error updating movie!");
-    console.error("❌ Error updating movie:", error);
-  }
-};
-
-
-
+    } catch (error) {
+      toast.error("Error updating movie!");
+      console.error("❌ Error updating movie:", error);
+    }
+  };
 
   const handleDelete = async (id) => {
     try {
       await deleteMovie(id);
       fetchMovies();
       toast.success("Movie deleted successfully!");
-
     } catch (error) {
       console.error("Error deleting movie:", error);
       toast.error("Error deleting movie!");
-
     }
   };
 
   const handleEdit = (movie) => {
     setEditingMovie(movie);
     setMovieData({
-        title: movie.title,
-        year: movie.year,
-        genre: movie.genre.join(", "),
-        rating: movie.rating,
-        trailer: movie.trailer,
-        runtime: movie.runtime,
-        country: movie.country,
-        language: movie.language,
-        production: movie.production,
-        pricePerTicket: movie.pricing.pricePerTicket,
-        totalTickets: movie.tickets.total,
-        poster: movie.poster, // ✅ Keep the existing poster URL instead of setting null
+      title: movie.title,
+      year: movie.year,
+      genre: movie.genre.join(", "),
+      rating: movie.rating,
+      trailer: movie.trailer,
+      runtime: movie.runtime,
+      country: movie.country,
+      language: movie.language,
+      production: movie.production,
+      pricePerTicket: movie.pricing.pricePerTicket,
+      totalTickets: movie.tickets.total,
+      poster: movie.poster, // ✅ Keep the existing poster URL instead of setting null
     });
-};
+    setShowForm(true); // Show the form when editing a movie
+  };
 
-
-  // const handleUpdate = async () => {
-  //   const formData = new FormData();
-  //   Object.keys(movieData).forEach((key) => {
-  //     formData.append(key, movieData[key]);
-  //   });
-
-  //   try {
-  //     await updateMovie(editingMovie._id, formData);
-  //     fetchMovies();
-  //     setEditingMovie(null);
-  //   } catch (error) {
-  //     console.error("Error updating movie:", error);
-  //   }
-  // };
+  const resetForm = () => {
+    setMovieData({
+      title: "",
+      year: "",
+      genre: "",
+      rating: "",
+      trailer: "",
+      runtime: "",
+      country: "",
+      language: "",
+      production: "",
+      pricePerTicket: "",
+      totalTickets: "",
+      poster: "",
+    });
+    setErrors({});
+    setEditingMovie(null);
+    setShowForm(false); // Hide the form after submission or reset
+  };
 
   return (
     <>
       <Navbar />
       <div className="movies-management-container">
-      <Toaster position="top-right" />
+        <Toaster position="top-right" />
 
         <h2>Movie Management</h2>
 
+        <button className="toggle-form-btn" onClick={() => setShowForm(!showForm)}>
+          {showForm ? "Cancel" : "Add Movie"}
+        </button>
+
         {/* Add Movie Form */}
-        <div className="add-movie-form">
-          <input type="text" name="title" placeholder="Title" onChange={handleChange} value={movieData.title} />
-          {errors.title && <p className="error">{errors.title}</p>}
+        {showForm && (
+          <div className="add-movie-form">
+            <input type="text" name="title" placeholder="Title" onChange={handleChange} value={movieData.title} />
+            {errors.title && <p className="error">{errors.title}</p>}
 
-          <input type="number" name="year" placeholder="Year" onChange={handleChange} value={movieData.year} />
-          {errors.year && <p className="error">{errors.year}</p>}
+            <input type="number" name="year" placeholder="Year" onChange={handleChange} value={movieData.year} />
+            {errors.year && <p className="error">{errors.year}</p>}
 
-          <input type="text" name="genre" placeholder="Genre (comma-separated)eg A" onChange={handleChange} value={movieData.genre} />
-          {errors.genre && <p className="error">{errors.genre}</p>}
+            <input type="text" name="genre" placeholder="Genre (comma-separated)" onChange={handleChange} value={movieData.genre} />
+            {errors.genre && <p className="error">{errors.genre}</p>}
 
-          <input type="number" name="rating" placeholder="Rating" onChange={handleChange} value={movieData.rating} />
-          {errors.rating && <p className="error">{errors.rating}</p>}
+            <input type="number" name="rating" placeholder="Rating" onChange={handleChange} value={movieData.rating} />
+            {errors.rating && <p className="error">{errors.rating}</p>}
 
-          <input type="text" name="trailer" placeholder="Trailer URL" onChange={handleChange} value={movieData.trailer} />
-          {errors.trailer && <p className="error">{errors.trailer}</p>}
+            <input type="text" name="trailer" placeholder="Trailer URL" onChange={handleChange} value={movieData.trailer} />
+            {errors.trailer && <p className="error">{errors.trailer}</p>}
 
-          <input type="number" name="runtime" placeholder="Runtime (mins)" onChange={handleChange} value={movieData.runtime} />
-          {errors.runtime && <p className="error">{errors.runtime}</p>}
+            <input type="number" name="runtime" placeholder="Runtime (mins)" onChange={handleChange} value={movieData.runtime} />
+            {errors.runtime && <p className="error">{errors.runtime}</p>}
 
-          <input type="text" name="country" placeholder="Country" onChange={handleChange} value={movieData.country} />
-          {errors.country && <p className="error">{errors.country}</p>}
+            {/* Country Dropdown */}
+            <select 
+              name="country" 
+              className="form-select bg-dark text-white border-secondary shadow-sm" 
+              onChange={handleChange} 
+              value={movieData.country}
+            >
+              <option value="">Select Country</option>
+              <option value="India">India</option>
+              <option value="USA">USA</option>
+              <option value="UK">UK</option>
+            </select>
+            {errors.country && <p className="text-danger mt-1">{errors.country}</p>}
 
-          <input type="text" name="language" placeholder="Language  only Hindi , English, Tamil" onChange={handleChange} value={movieData.language} />
-          {errors.language && <p className="error">{errors.language}</p>}
+            {/* Language Dropdown */}
+            <select 
+              name="language" 
+              className="form-select bg-dark text-white border-secondary shadow-sm mt-2" 
+              onChange={handleChange} 
+              value={movieData.language}
+            >
+              <option value="">Select Language</option>
+              <option value="Hindi">Hindi</option>
+              <option value="English">English</option>
+              <option value="Tamil">Tamil</option>
+            </select>
+            {errors.language && <p className="text-danger mt-1">{errors.language}</p>}
 
-          <input type="text" name="production" placeholder="Production" onChange={handleChange} value={movieData.production} />
-          {errors.production && <p className="error">{errors.production}</p>}
+            <input type="text" name="production" placeholder="Production" onChange={handleChange} value={movieData.production} />
+            {errors.production && <p className="error">{errors.production}</p>}
 
-          <input type="number" name="pricePerTicket" placeholder="Price per Ticket" onChange={handleChange} value={movieData.pricePerTicket} />
-          {errors.pricePerTicket && <p className="error">{errors.pricePerTicket}</p>}
+            <input type="number" name="pricePerTicket" placeholder="Price per Ticket" onChange={handleChange} value={movieData.pricePerTicket} />
+            {errors.pricePerTicket && <p className="error">{errors.pricePerTicket}</p>}
 
-          <input type="number" name="totalTickets" placeholder="Total Tickets" onChange={handleChange} value={movieData.totalTickets} />
-          {errors.totalTickets && <p className="error">{errors.totalTickets}</p>}
+            <input type="number" name="totalTickets" placeholder="Total Tickets" onChange={handleChange} value={movieData.totalTickets} />
+            {errors.totalTickets && <p className="error">{errors.totalTickets}</p>}
 
-          <input
-            type="text"
-            name="poster"
-            placeholder="Enter Poster Image URL"
-            onChange={handleChange}
-            value={movieData.poster}
-          />
-          {errors.poster && <p className="error">{errors.poster}</p>}
+            <input
+              type="text"
+              name="poster"
+              placeholder="Enter Poster Image URL"
+              onChange={handleChange}
+              value={movieData.poster}
+            />
+            {errors.poster && <p className="error">{errors.poster}</p>}
 
-
-          {editingMovie ? (
-            <button onClick={handleUpdate}>Update Movie</button>
-          ) : (
-            <>
-              <button onClick={() => handleSubmit("upcoming")}>Save as Upcoming</button>
-              <button onClick={() => handleSubmit("now_playing")}>Save as Now Playing</button>
-            </>
-          )}
-        </div>
-
+            {editingMovie ? (
+              <button onClick={handleUpdate}>Update Movie</button>
+            ) : (
+              <>
+                <button onClick={() => handleSubmit("upcoming")}>Save as Upcoming</button>
+                <button onClick={() => handleSubmit("now_playing")}>Save as Now Playing</button>
+              </>
+            )}
+          </div>
+        )}
 
         {/* Display Movies */}
         <div className="movies-list">
@@ -308,7 +302,6 @@ const handleUpdate = async () => {
           <div className="movies-grid">
             {movies && Array.isArray(movies) && movies.length > 0 ? (
               movies.filter((m) => m.status === "now_playing").map((movie) => (
-
                 <div key={movie._id} className="movie-card">
                   <img
                     src={
@@ -329,11 +322,24 @@ const handleUpdate = async () => {
               <p>No movies found.</p>
             )}
           </div>
-
-
+          <h3>Deleted Movies</h3>
+          <div className="movies-grid">
+            {deletedmovies.length > 0 ? (
+              deletedmovies.map(movie => (
+                <div key={movie._id} className="movie-card">
+                  <img src={movie.poster} alt={movie.title} />
+                  <h4>{movie.title}</h4>
+                  <p>{movie.genre.join(", ")}</p>
+                  <div className="buttons-cards">
+                    {/* Optionally, you can add a restore button if you want to allow restoring deleted movies */}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No deleted movies found.</p>
+            )}
+          </div>
         </div>
-
-
       </div>
     </>
   );

@@ -143,4 +143,14 @@
       height: 50px;
     }
   }
+  .active-indicator{
+    color: white;
+  
+
+  }
+  .deleted-indicator{
+    color: red;
+    text-shadow: 0 0 10px rgba(130, 5, 5, 0.7);
+
+  }
   

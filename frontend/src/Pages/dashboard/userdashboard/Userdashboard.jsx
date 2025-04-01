@@ -24,7 +24,7 @@ function UserDashboard() {
         try {
             const response = await getAllMoviesUser();
             setMovies(response.movies);
-            setFilteredMovies(response.movies);
+            setFilteredMovies(response.movies.filter(movie => !movie.deleted));
         } catch (error) {
             console.error("Error fetching movies:", error);
         } finally {
