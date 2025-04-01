@@ -32,7 +32,7 @@ function Signup() {
     if (name === "username" && !usernameRegex.test(value)) {
       errorMessage = "Username must start with a capital letter(Ram Sharma)";
     } else if (name === "email" && !emailRegex.test(value)) {
-      errorMessage = "Email must contain only lowercase letters.";
+      errorMessage = "Email must contain only lowercase letters.Enter the valid email";
     } else if (name === "password" && !passwordRegex.test(value)) {
       errorMessage = "Password must be 8+ characters, including uppercase, lowercase, number, and special character.";
     }

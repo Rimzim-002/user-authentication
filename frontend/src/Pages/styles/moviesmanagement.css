@@ -229,3 +229,178 @@
     grid-template-columns: 1fr; /* 1 card per row for small screens */
   }
 }
+/* 🎬 Custom Dropdown */
+.form-select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid transparent;
+  padding: 12px;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  outline: none;
+  transition: 0.3s ease-in-out;
+  width: 100%;
+}
+
+.form-select:focus {
+  border: 2px solid cyan;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
+.form-select option {
+  background: #000428;
+  color: white;
+}
+/* 🎬 Add Movie Button */
+.toggle-form-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #004e92;
+  color: white;
+  padding: 12px 18px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0, 102, 255, 0.4);
+}
+
+.toggle-form-btn:hover {
+  background: #003366;
+  box-shadow: 0 0 15px rgba(0, 102, 255, 0.8);
+}
+/* Movies Management Container */
+.mm-movies-management-container {
+  padding: 20px;
+  background-color: #f8f9fa; /* Light background for the container */
+}
+
+/* Toggle Buttons */
+.mm-toggle-form-btn,
+.mm-toggle-sidebar-btn {
+  margin: 10px 0;
+  padding: 10px 15px;
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.mm-toggle-form-btn:hover,
+.mm-toggle-sidebar-btn:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Add Movie Form */
+.mm-add-movie-form {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+/* Input Fields */
+.mm-add-movie-form input,
+.mm-add-movie-form select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+/* Error Messages */
+.error {
+  color: red;
+  font-size: 0.9em;
+}
+
+/* Movies List */
+.mm-movies-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Movie Card */
+.mm-movie-card {
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  padding: 10px;
+  width: 200px; /* Fixed width for cards */
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.mm-movie-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+}
+
+.mm-movie-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+/* Sidebar Styles */
+.mm-sidebar {
+  position: fixed;
+  top: 0;
+  right: -300px; /* Hide off-screen */
+  width: 300px;
+  height: 100%;
+  background-color: #ffffff; /* White background */
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  padding: 20px;
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.mm-sidebar.open {
+  right: 0; /* Show sidebar */
+}
+
+.mm-close-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #007bff; /* Bootstrap primary color */
+}
+
+/* Deleted Movies List in Sidebar */
+.mm-deleted-movies-list {
+  margin-top: 20px;
+  max-height: calc(100% - 60px); /* Adjust height to allow for scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Additional Styles for Buttons */
+.mm-movie-card button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #28a745; /* Bootstrap success color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.mm-movie-card button:hover {
+  background-color: #218838; /* Darker shade on hover */
+}
+
+/* Style for the title in the sidebar */
+.mm-sidebar h3 {
+  margin-bottom: 15px;
+  font-size: 1.5em;
+  color: #333; /* Darker text color for better readability */
+}

@@ -34,8 +34,10 @@ const movieSchema = new mongoose.Schema({
 
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", }, // ✅ Superadmin ID
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null }, // ✅ Superadmin ID on update
-
-}, { timestamps: true }); // ✅ `createdAt` and `updatedAt` managed automatically
+    deleted: { type: Boolean, default: false }, // Soft delete flag
+    deletedAt: { type: Date, default: null } // Optional: timestamp for when it was deleted
+},
+ { timestamps: true }); // ✅ `createdAt` and `updatedAt` managed automatically
 
 const Movie = mongoose.model("Movie", movieSchema);
 module.exports = Movie;
